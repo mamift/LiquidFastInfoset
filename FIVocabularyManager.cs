@@ -18,9 +18,8 @@
  *  For product and commercial licensing details please contact us:
  *  http://www.liquid-technologies.com
  */
-using System;
+
 using System.Collections.Generic;
-using System.Text;
 
 namespace LiquidTechnologies.FastInfoset
 {

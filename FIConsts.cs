@@ -19,7 +19,6 @@
  *  http://www.liquid-technologies.com
  */
 
-using System;
 using System.Text;
 
 namespace LiquidTechnologies.FastInfoset

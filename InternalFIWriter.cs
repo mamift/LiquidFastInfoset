@@ -20,23 +20,19 @@
  */
 
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
-using System.Text;
 
 namespace LiquidTechnologies.FastInfoset
 {
-	class InternalFIWriter
+    internal class InternalFIWriter
 	{
-		#region Inner Classes
 		private class NamespaceManager
 		{
 			private const int NS_GROW_SIZE = 8;
 			private const int ELM_INIT_SIZE = 64; // exponential
 
-			#region Inner Struct
 			private struct NamespaceInfo
 			{
 				internal void Init(string prefix, string ns)
@@ -66,7 +62,6 @@ namespace LiquidTechnologies.FastInfoset
 				internal int prevNamespaceTop;
 				internal int prefixCount;
 			}
-			#endregion
 
 			internal NamespaceManager()
 			{
@@ -78,12 +73,9 @@ namespace LiquidTechnologies.FastInfoset
 				_elementStack[_elementTop].Init(-1);
 			}
 
-			internal string DefaultNamespace
-			{
-				get { return _elementStack[_elementTop].defaultNamespace; }
-			}
+			internal string DefaultNamespace => _elementStack[_elementTop].defaultNamespace;
 
-			internal string GeneratePrefix()
+            internal string GeneratePrefix()
 			{
 				int num = _elementStack[_elementTop].prefixCount++ + 1;
 				return ("d" + _elementTop.ToString("d", CultureInfo.InvariantCulture) + "p" + num.ToString("d", CultureInfo.InvariantCulture));
@@ -207,9 +199,7 @@ namespace LiquidTechnologies.FastInfoset
 			private int _elementTop;
 			private ElementInfo[] _elementStack;
 		}
-		#endregion
 
-		#region Constructors
 		internal InternalFIWriter(Stream output, FIWriterVocabulary vocabulary)
 		{
 			_encoder = new FIEncoder(output, vocabulary);
@@ -218,15 +208,10 @@ namespace LiquidTechnologies.FastInfoset
 			_hasElement = false;
 			_hasAttribute = false;
 		}
-		#endregion
 
-		#region Internal FI Methods
-		internal FIWriterVocabulary Vocabulary
-		{
-			get { return _encoder.Vocabulary; }
-		}
+		internal FIWriterVocabulary Vocabulary => _encoder.Vocabulary;
 
-		internal void Close()
+        internal void Close()
 		{
 			if (_encoder != null)
 				_encoder.Close();
@@ -256,7 +241,6 @@ namespace LiquidTechnologies.FastInfoset
 			return prefix;
 		}
 
-		#region Write Document Methods
 		internal void WriteStartDocument(FIWriter.FInfoDecl decl)
 		{
 			_encoder.WriteDeclaraion(decl);
@@ -272,9 +256,7 @@ namespace LiquidTechnologies.FastInfoset
 		{
 			_encoder.WriteEndDocument();
 		}
-		#endregion
 		
-		#region Write Element Methods
 		internal void WriteStartElement(string prefix, string localName, string ns)
 		{
 			FlushElement();
@@ -290,9 +272,7 @@ namespace LiquidTechnologies.FastInfoset
 			
 			_encoder.WriteEndElement();
 		}
-		#endregion
 
-		#region Write Attribute Methods
 		internal void WriteStartAttribute(string prefix, string localName, string ns)
 		{
 			Debug.Assert(_element != null);
@@ -367,7 +347,7 @@ namespace LiquidTechnologies.FastInfoset
 
 			if (_isNamespaceAttribute)
 			{
-				if (_attribute.qnameIndex.qname.localName == FIConsts.FI_XML_NAMESPACE_NAME)
+				if (_attribute.qnameIndex.Qname.LocalName == FIConsts.FI_XML_NAMESPACE_NAME)
 					_element.DefaultNamespace = (string)(_attribute.data);
 				else
 					_element.AddNamespaceAttribute(_attribute);
@@ -377,9 +357,7 @@ namespace LiquidTechnologies.FastInfoset
 
 			_hasAttribute = false;
 		}
-		#endregion
 
-		#region Write Content Methods
 		internal void WriteContent(string text)
 		{
 			Debug.Assert(text != null);
@@ -442,11 +420,8 @@ namespace LiquidTechnologies.FastInfoset
 			FlushElement();
 			_encoder.WriteProcessingInstruction(name, text);
 		}
-		#endregion
 
-		#endregion
 
-		#region Private Methods
 		private void FlushElement()
 		{
 			if (_hasElement)
@@ -455,9 +430,7 @@ namespace LiquidTechnologies.FastInfoset
 				_hasElement = false;
 			}
 		}
-		#endregion
 
-		#region Member Variables
 		private FIEncoder _encoder;
 		private NamespaceManager _namespaceManager;
 		private FIEncoder.FIElement _element;
@@ -466,6 +439,5 @@ namespace LiquidTechnologies.FastInfoset
 		private bool _hasAttribute;
 		private string _prefixForXmlNs;
 		private bool _isNamespaceAttribute;
-		#endregion
 	}
 }

@@ -19,25 +19,19 @@
  *  http://www.liquid-technologies.com
  */
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-
 namespace LiquidTechnologies.FastInfoset
 {
+    internal struct QualifiedName
+    {
+        internal void Init(string prefix, string ns, string localName)
+        {
+            Prefix = prefix;
+            Ns = ns;
+            LocalName = localName;
+        }
 
-
-	internal struct QualifiedName
-	{
-		internal void Init(string prefix, string ns, string localName)
-		{
-			this.prefix = prefix;
-			this.ns = ns;
-			this.localName = localName;
-		}
-
-		internal string prefix;
-		internal string ns;
-		internal string localName;
-	}
+        internal string Prefix;
+        internal string Ns;
+        internal string LocalName;
+    }
 }

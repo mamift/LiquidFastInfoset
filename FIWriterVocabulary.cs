@@ -21,23 +21,21 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace LiquidTechnologies.FastInfoset
 {
 	internal class FIWriterVocabulary
 	{
-		#region Inner Classes
 		internal struct QNameIndex
 		{
 			internal void Init(string prefix, string ns, string localName)
 			{
-				index = -1;
-				qname.Init(prefix, ns, localName);
+				Index = -1;
+				Qname.Init(prefix, ns, localName);
 			}
 
-			internal QualifiedName qname;
-			internal int index;
+			internal QualifiedName Qname;
+			internal int Index;
 		}
 
 		internal class QNameIndexLookup
@@ -62,9 +60,9 @@ namespace LiquidTechnologies.FastInfoset
 				for (int n = 0; n < _qnames.Length; n++)
 				{
 					QNameIndex qnameIndex = _qnames[n];
-					if ((qnameIndex.qname.prefix == prefix) && (qnameIndex.qname.ns == ns))
+					if ((qnameIndex.Qname.Prefix == prefix) && (qnameIndex.Qname.Ns == ns))
 					{
-						index = qnameIndex.index;
+						index = qnameIndex.Index;
 						return true;
 					}
 				}
@@ -78,7 +76,7 @@ namespace LiquidTechnologies.FastInfoset
 				for (int n = 0; n < _qnames.Length; n++)
 				{
 					QNameIndex qnameIndex = _qnames[n];
-					if ((qnameIndex.qname.prefix == prefix) && (qnameIndex.qname.ns == ns))
+					if ((qnameIndex.Qname.Prefix == prefix) && (qnameIndex.Qname.Ns == ns))
 						return true;
 				}
 
@@ -105,23 +103,23 @@ namespace LiquidTechnologies.FastInfoset
 			internal bool TryAddQName(QNameIndex qnameIndex, out int index)
 			{
 				QNameIndexLookup qnameLookup;
-				if (_nameQNameIndexLookupMap.TryGetValue(qnameIndex.qname.localName, out qnameLookup))
+				if (_nameQNameIndexLookupMap.TryGetValue(qnameIndex.Qname.LocalName, out qnameLookup))
 				{
 					// found QNameIndexLookup for localName, so try match prfix and namespace
-					if (qnameLookup.TryGetIndex(qnameIndex.qname.prefix, qnameIndex.qname.ns, out index))
+					if (qnameLookup.TryGetIndex(qnameIndex.Qname.Prefix, qnameIndex.Qname.Ns, out index))
 						return false;
 
 					// match not found, so add a new entry
 					_lastIndex++;
-					qnameIndex.index = _lastIndex;
+					qnameIndex.Index = _lastIndex;
 					qnameLookup.AddQNameIndex(qnameIndex);
 				}
 				else
 				{
 					// match not found, so add a new lookup entry for localName
 					_lastIndex++;
-					qnameIndex.index = _lastIndex;
-					_nameQNameIndexLookupMap.Add(qnameIndex.qname.localName, new QNameIndexLookup(qnameIndex));
+					qnameIndex.Index = _lastIndex;
+					_nameQNameIndexLookupMap.Add(qnameIndex.Qname.LocalName, new QNameIndexLookup(qnameIndex));
 				}
 
 				index = -1;
@@ -131,10 +129,10 @@ namespace LiquidTechnologies.FastInfoset
 			internal bool Contains(QNameIndex qnameIndex)
 			{
 				QNameIndexLookup qnameLookup;
-				if (_nameQNameIndexLookupMap.TryGetValue(qnameIndex.qname.localName, out qnameLookup))
+				if (_nameQNameIndexLookupMap.TryGetValue(qnameIndex.Qname.LocalName, out qnameLookup))
 				{
 					// found QNameIndexLookup
-					return qnameLookup.Contains(qnameIndex.qname.prefix, qnameIndex.qname.ns);
+					return qnameLookup.Contains(qnameIndex.Qname.Prefix, qnameIndex.Qname.Ns);
 				}
 
 				return false;
@@ -143,17 +141,13 @@ namespace LiquidTechnologies.FastInfoset
 			private Dictionary<string, QNameIndexLookup> _nameQNameIndexLookupMap;
 			private int _lastIndex;
 		}
-		#endregion
 
-		#region enums
 		internal enum StringEncoding
 		{
 			UTF8,
 			UTF16BE
 		}
-		#endregion
 
-		#region Constructors
 		internal FIWriterVocabulary()
 		{
 			// internal vocabulary constructor
@@ -211,30 +205,27 @@ namespace LiquidTechnologies.FastInfoset
 			_prefixNamesMap.Add(FIConsts.FI_DEFAULT_PREFIX, 1);
 			_namespaceNamesMap.Add(FIConsts.FI_DEFAULT_NAMESPACE, 1);
 		}
-		#endregion
 
-		#region Internal Interface
-		internal QNameArray AttributeNamesMap { get { return _attributeNamesMap; } }
-		internal Dictionary<string, int> AttributeValuesMap { get { return _attributeValuesMap; } }
-		internal QNameArray ElementNamesMap { get { return _elementNamesMap; } }
-		internal Dictionary<string, int> ContentCharacterChunksMap { get { return _contentCharacterChunksMap; } }
-		internal Dictionary<string, int> LocalNamesMap { get { return _localNamesMap; } }
-		internal Dictionary<string, int> NamespaceNamesMap { get { return _namespaceNamesMap; } }
-		internal Dictionary<string, int> PrefixNamesMap { get { return _prefixNamesMap; } }
-		internal Dictionary<string, int> OtherNCNamesMap { get { return _otherNCNamesMap; } }
-		internal Dictionary<string, int> OtherStringMap { get { return _otherStringMap; } }
+		internal QNameArray AttributeNamesMap => _attributeNamesMap;
+        internal Dictionary<string, int> AttributeValuesMap => _attributeValuesMap;
+        internal QNameArray ElementNamesMap => _elementNamesMap;
+        internal Dictionary<string, int> ContentCharacterChunksMap => _contentCharacterChunksMap;
+        internal Dictionary<string, int> LocalNamesMap => _localNamesMap;
+        internal Dictionary<string, int> NamespaceNamesMap => _namespaceNamesMap;
+        internal Dictionary<string, int> PrefixNamesMap => _prefixNamesMap;
+        internal Dictionary<string, int> OtherNCNamesMap => _otherNCNamesMap;
+        internal Dictionary<string, int> OtherStringMap => _otherStringMap;
 
-		#region Add Methods
-		internal void AddAttribute(string prefix, string ns, string localName)
+        internal void AddAttribute(string prefix, string ns, string localName)
 		{
-			QNameIndex qname = new QNameIndex();
+			var qname = new QNameIndex();
 			qname.Init(prefix, ns, localName);
 			AddQName(qname, _attributeNamesMap);
 		}
 
 		internal void AddElement(string prefix, string ns, string localName)
 		{
-			QNameIndex qname = new QNameIndex();
+			var qname = new QNameIndex();
 			qname.Init(prefix, ns, localName);
 			AddQName(qname, _elementNamesMap);
 		}
@@ -285,20 +276,20 @@ namespace LiquidTechnologies.FastInfoset
 				int namespaceIndex = 0;
 				int localNameIndex = 0;
 
-				if (!string.IsNullOrEmpty(qnameIndex.qname.prefix))
+				if (!string.IsNullOrEmpty(qnameIndex.Qname.Prefix))
 				{
-					if (!FindPrefixNameIndex(qnameIndex.qname.prefix, out prefixIndex))
-						AddPrefixName(qnameIndex.qname.prefix);
+					if (!FindPrefixNameIndex(qnameIndex.Qname.Prefix, out prefixIndex))
+						AddPrefixName(qnameIndex.Qname.Prefix);
 				}
 
-				if (!string.IsNullOrEmpty(qnameIndex.qname.ns))
+				if (!string.IsNullOrEmpty(qnameIndex.Qname.Ns))
 				{
-					if (!FindNamespaceNameIndex(qnameIndex.qname.ns, out namespaceIndex))
-						AddNamespaceName(qnameIndex.qname.ns);
+					if (!FindNamespaceNameIndex(qnameIndex.Qname.Ns, out namespaceIndex))
+						AddNamespaceName(qnameIndex.Qname.Ns);
 				}
 
-				if (!FindLocalNameIndex(qnameIndex.qname.localName, out localNameIndex))
-					AddLocalName(qnameIndex.qname.localName);
+				if (!FindLocalNameIndex(qnameIndex.Qname.LocalName, out localNameIndex))
+					AddLocalName(qnameIndex.Qname.LocalName);
 			}
 		}
 
@@ -307,19 +298,14 @@ namespace LiquidTechnologies.FastInfoset
 			if (map.Count < FIConsts.TWO_POWER_TWENTY)
 				map.Add(key, map.Count + 1);
 		}
-		#endregion
 
-		#region Lookup Methods
-		internal string URI
-		{
-			get { return _uri; }
-		}
+		internal string URI => _uri;
 
-		internal StringEncoding CharacterStringEncoding
+        internal StringEncoding CharacterStringEncoding
 		{
-			get { return _stringEncoding; }
-			set { _stringEncoding = value; }
-		}
+			get => _stringEncoding;
+            set => _stringEncoding = value;
+        }
 
 		internal FIRestrictedAlphabet RestrictedAlphabet(int fiTableIndex)
 		{
@@ -356,10 +342,7 @@ namespace LiquidTechnologies.FastInfoset
 		{
 			return _localNamesMap.TryGetValue(name, out index);
 		}
-		#endregion
-		#endregion
 
-		#region Members Variables
 		// Internal Data
 		private string _uri = null;
 		private StringEncoding _stringEncoding = StringEncoding.UTF8;
@@ -380,6 +363,5 @@ namespace LiquidTechnologies.FastInfoset
 
 		private Dictionary<string, int> _otherNCNamesMap;
 		private Dictionary<string, int> _otherStringMap;
-		#endregion
 	}
 }

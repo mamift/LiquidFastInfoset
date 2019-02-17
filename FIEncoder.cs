@@ -31,11 +31,8 @@ namespace LiquidTechnologies.FastInfoset
     // it is therefore up to the calling class to ensure valid state at all times
     internal class FIEncoder
     {
-        #region Consts
         private const byte DEFAULT_MAX_ADD_LEN = 60;
-        #endregion
 
-        #region Inner Classes
         internal struct FIAttribute
         {
             internal void Init(string prefix, string ns, string localName)
@@ -139,9 +136,7 @@ namespace LiquidTechnologies.FastInfoset
             private FIAttribute[] _attributes;
             private int _attributesTop;
         }
-        #endregion
 
-        #region Constructors
         internal FIEncoder(Stream output, FIWriterVocabulary vocabulary)
         {
             _output = output;
@@ -156,9 +151,7 @@ namespace LiquidTechnologies.FastInfoset
             _encodingBuffer = new byte[1024]; // 1K
             _encodingBufferLength = 0;
         }
-        #endregion
 
-        #region Internal Interface
         internal void Close()
         {
             if (_output != null)
@@ -259,7 +252,7 @@ namespace LiquidTechnologies.FastInfoset
 
                     // must have prefix, so append 11001111
                     _output.WriteByte((byte)0xCF);
-                    IdentifyingStringOrIndexBit1(attr.qnameIndex.qname.localName, _vocabulary.PrefixNamesMap);
+                    IdentifyingStringOrIndexBit1(attr.qnameIndex.Qname.LocalName, _vocabulary.PrefixNamesMap);
                     IdentifyingStringOrIndexBit1((string)(attr.data), _vocabulary.NamespaceNamesMap);
                 }
 
@@ -372,9 +365,7 @@ namespace LiquidTechnologies.FastInfoset
             // append 10xxxxxx
             NonIdentifyingStringOrIndexBit3(0x80, encoding, data);
         }
-        #endregion
 
-        #region Private Methods
         private void AlignmentOnBit1()
         {
             if (_terminateElement || _terminateAttributes || _terminateDTD)
@@ -385,9 +376,7 @@ namespace LiquidTechnologies.FastInfoset
                 _terminateDTD = false;
             }
         }
-        #endregion
 
-        #region Private FI Encoding Methods
         // C.13
         private void IdentifyingStringOrIndexBit1(string key, Dictionary<string, int> mapValues)
         {
@@ -486,7 +475,7 @@ namespace LiquidTechnologies.FastInfoset
         {
             // byCurrent should only have most significant bits preset x0000000
             Debug.Assert((byCurrent & 0x7F) == 0);
-            Debug.Assert((qnameIndex.qname.localName != null) && (qnameIndex.qname.localName.Length != 0));
+            Debug.Assert((qnameIndex.Qname.LocalName != null) && (qnameIndex.Qname.LocalName.Length != 0));
 
             int index = 0;
             if (!mapQNames.TryAddQName(qnameIndex, out index))
@@ -499,14 +488,14 @@ namespace LiquidTechnologies.FastInfoset
                 // literal-qualified-name so append x11110xx
 
                 // see if we have prefix and namespace
-                if ((qnameIndex.qname.prefix != null) && (qnameIndex.qname.prefix.Length != 0))
+                if ((qnameIndex.Qname.Prefix != null) && (qnameIndex.Qname.Prefix.Length != 0))
                 {
                     // must have namespace if we have prefix
-                    Debug.Assert(qnameIndex.qname.ns.Length != 0);
+                    Debug.Assert(qnameIndex.Qname.Ns.Length != 0);
                     // prefix and namespace x1111011
                     _output.WriteByte((byte)(byCurrent | 0x7B));
                 }
-                else if ((qnameIndex.qname.ns != null) && (qnameIndex.qname.ns.Length != 0))
+                else if ((qnameIndex.Qname.Ns != null) && (qnameIndex.Qname.Ns.Length != 0))
                     // namespace x1111001
                     _output.WriteByte((byte)(byCurrent | 0x79));
                 else
@@ -516,10 +505,10 @@ namespace LiquidTechnologies.FastInfoset
 
                 // always on bit 1 here...
 
-                if ((qnameIndex.qname.prefix != null) && (qnameIndex.qname.prefix.Length != 0))
+                if ((qnameIndex.Qname.Prefix != null) && (qnameIndex.Qname.Prefix.Length != 0))
                 {
                     int prefixIndex = 0;
-                    if (_vocabulary.FindPrefixNameIndex(qnameIndex.qname.prefix, out prefixIndex))
+                    if (_vocabulary.FindPrefixNameIndex(qnameIndex.Qname.Prefix, out prefixIndex))
                     {
                         // string-index so add 1xxxxxxx and index
                         Integer1To2pw20Bit2(0x80, prefixIndex);
@@ -527,15 +516,15 @@ namespace LiquidTechnologies.FastInfoset
                     else
                     {
                         // literal-character-string
-                        NonEmptyOctetStringBit2(0, qnameIndex.qname.prefix);
-                        _vocabulary.AddPrefixName(qnameIndex.qname.prefix);
+                        NonEmptyOctetStringBit2(0, qnameIndex.Qname.Prefix);
+                        _vocabulary.AddPrefixName(qnameIndex.Qname.Prefix);
                     }
                 }
 
-                if ((qnameIndex.qname.ns != null) && (qnameIndex.qname.ns.Length != 0))
+                if ((qnameIndex.Qname.Ns != null) && (qnameIndex.Qname.Ns.Length != 0))
                 {
                     int namespaceIndex = 0;
-                    if (_vocabulary.FindNamespaceNameIndex(qnameIndex.qname.ns, out namespaceIndex))
+                    if (_vocabulary.FindNamespaceNameIndex(qnameIndex.Qname.Ns, out namespaceIndex))
                     {
                         // string-index so add 1xxxxxxx and index
                         Integer1To2pw20Bit2(0x80, namespaceIndex);
@@ -543,13 +532,13 @@ namespace LiquidTechnologies.FastInfoset
                     else
                     {
                         // literal-character-string
-                        NonEmptyOctetStringBit2(0, qnameIndex.qname.ns);
-                        _vocabulary.AddNamespaceName(qnameIndex.qname.ns);
+                        NonEmptyOctetStringBit2(0, qnameIndex.Qname.Ns);
+                        _vocabulary.AddNamespaceName(qnameIndex.Qname.Ns);
                     }
                 }
 
                 int localNameIndex = 0;
-                if (_vocabulary.FindLocalNameIndex(qnameIndex.qname.localName, out localNameIndex))
+                if (_vocabulary.FindLocalNameIndex(qnameIndex.Qname.LocalName, out localNameIndex))
                 {
                     // string-index so add 1xxxxxxx and index
                     Integer1To2pw20Bit2(0x80, localNameIndex);
@@ -557,8 +546,8 @@ namespace LiquidTechnologies.FastInfoset
                 else
                 {
                     // literal-character-string
-                    NonEmptyOctetStringBit2(0, qnameIndex.qname.localName);
-                    _vocabulary.AddLocalName(qnameIndex.qname.localName);
+                    NonEmptyOctetStringBit2(0, qnameIndex.Qname.LocalName);
+                    _vocabulary.AddLocalName(qnameIndex.Qname.LocalName);
                 }
             }
         }
@@ -568,7 +557,7 @@ namespace LiquidTechnologies.FastInfoset
         {
             // byCurrent should only have 2 most significant bits preset xx000000
             Debug.Assert((byCurrent & 0x3F) == 0);
-            Debug.Assert((qnameIndex.qname.localName != null) && (qnameIndex.qname.localName.Length != 0));
+            Debug.Assert((qnameIndex.Qname.LocalName != null) && (qnameIndex.Qname.LocalName.Length != 0));
 
             int index = 0;
             if (!mapQNames.TryAddQName(qnameIndex, out index))
@@ -581,14 +570,14 @@ namespace LiquidTechnologies.FastInfoset
                 // literal-qualified-name so append xx1111xx
 
                 // see if we have prefix and namespace
-                if ((qnameIndex.qname.prefix != null) && (qnameIndex.qname.prefix.Length != 0))
+                if ((qnameIndex.Qname.Prefix != null) && (qnameIndex.Qname.Prefix.Length != 0))
                 {
                     // must have namespace if we have prefix
-                    Debug.Assert(qnameIndex.qname.ns.Length != 0);
+                    Debug.Assert(qnameIndex.Qname.Ns.Length != 0);
                     // prefix and namespace xx111111
                     _output.WriteByte((byte)(byCurrent | 0x3F));
                 }
-                else if ((qnameIndex.qname.ns != null) && (qnameIndex.qname.ns.Length != 0))
+                else if ((qnameIndex.Qname.Ns != null) && (qnameIndex.Qname.Ns.Length != 0))
                     // namespace xx111101
                     _output.WriteByte((byte)(byCurrent | 0x3D));
                 else
@@ -598,10 +587,10 @@ namespace LiquidTechnologies.FastInfoset
 
                 // always on bit 1 here...
 
-                if ((qnameIndex.qname.prefix != null) && (qnameIndex.qname.prefix.Length != 0))
+                if ((qnameIndex.Qname.Prefix != null) && (qnameIndex.Qname.Prefix.Length != 0))
                 {
                     int prefixIndex = 0;
-                    if (_vocabulary.FindPrefixNameIndex(qnameIndex.qname.prefix, out prefixIndex))
+                    if (_vocabulary.FindPrefixNameIndex(qnameIndex.Qname.Prefix, out prefixIndex))
                     {
                         // string-index so add 1xxxxxxx and index
                         Integer1To2pw20Bit2(0x80, prefixIndex);
@@ -609,15 +598,15 @@ namespace LiquidTechnologies.FastInfoset
                     else
                     {
                         // literal-character-string
-                        NonEmptyOctetStringBit2(0, qnameIndex.qname.prefix);
-                        _vocabulary.AddPrefixName(qnameIndex.qname.prefix);
+                        NonEmptyOctetStringBit2(0, qnameIndex.Qname.Prefix);
+                        _vocabulary.AddPrefixName(qnameIndex.Qname.Prefix);
                     }
                 }
 
-                if ((qnameIndex.qname.ns != null) && (qnameIndex.qname.ns.Length != 0))
+                if ((qnameIndex.Qname.Ns != null) && (qnameIndex.Qname.Ns.Length != 0))
                 {
                     int namespaceIndex = 0;
-                    if (_vocabulary.FindNamespaceNameIndex(qnameIndex.qname.ns, out namespaceIndex))
+                    if (_vocabulary.FindNamespaceNameIndex(qnameIndex.Qname.Ns, out namespaceIndex))
                     {
                         // string-index so add 1xxxxxxx and index
                         Integer1To2pw20Bit2(0x80, namespaceIndex);
@@ -625,13 +614,13 @@ namespace LiquidTechnologies.FastInfoset
                     else
                     {
                         // literal-character-string
-                        NonEmptyOctetStringBit2(0, qnameIndex.qname.ns);
-                        _vocabulary.AddNamespaceName(qnameIndex.qname.ns);
+                        NonEmptyOctetStringBit2(0, qnameIndex.Qname.Ns);
+                        _vocabulary.AddNamespaceName(qnameIndex.Qname.Ns);
                     }
                 }
 
                 int localNameIndex = 0;
-                if (_vocabulary.FindLocalNameIndex(qnameIndex.qname.localName, out localNameIndex))
+                if (_vocabulary.FindLocalNameIndex(qnameIndex.Qname.LocalName, out localNameIndex))
                 {
                     // string-index so add 1xxxxxxx and index
                     Integer1To2pw20Bit2(0x80, localNameIndex);
@@ -639,8 +628,8 @@ namespace LiquidTechnologies.FastInfoset
                 else
                 {
                     // literal-character-string
-                    NonEmptyOctetStringBit2(0, qnameIndex.qname.localName);
-                    _vocabulary.AddLocalName(qnameIndex.qname.localName);
+                    NonEmptyOctetStringBit2(0, qnameIndex.Qname.LocalName);
+                    _vocabulary.AddLocalName(qnameIndex.Qname.LocalName);
                 }
             }
         }
@@ -961,9 +950,7 @@ namespace LiquidTechnologies.FastInfoset
 
             _encodingBufferLength = Encoding.BigEndianUnicode.GetBytes(val, 0, val.Length, _encodingBuffer, 0);
         }
-        #endregion
 
-        #region Member Variables
         private Stream _output;
         private FIWriterVocabulary _vocabulary;
         private bool _terminateElement;
@@ -971,6 +958,5 @@ namespace LiquidTechnologies.FastInfoset
         private bool _terminateDTD;
         private byte[] _encodingBuffer = null;
         private int _encodingBufferLength = 0;
-        #endregion
     }
 }

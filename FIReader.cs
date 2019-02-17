@@ -20,10 +20,7 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
-using System.Text;
 using System.Xml;
 
 namespace LiquidTechnologies.FastInfoset
@@ -64,7 +61,6 @@ namespace LiquidTechnologies.FastInfoset
 	/// </example>
 	public sealed class FIReader : XmlReader
 	{
-		#region Constructors
 		/// <summary>
 		/// Initializes a new instance of the XmlTextReader class with the specified file.
 		/// </summary>
@@ -158,9 +154,7 @@ namespace LiquidTechnologies.FastInfoset
 
 			_parser = new FIParser(input, vocabularyManager, nameTable);
 		}
-		#endregion
 
-		#region XmlReader Abstract Overrides
 		/// <summary>
 		/// Gets the number of attributes on the current node.
 		/// </summary>
@@ -273,7 +267,7 @@ namespace LiquidTechnologies.FastInfoset
 				for (int n = 0; n < _currentNode.AttributeCount; n++)
 				{
 					FIParser.FINode.QNameValue qnameValue = _currentNode.Attributes[n];
-					if ((qnameValue.qname.localName == name) && (qnameValue.qname.ns == namespaceURI))
+					if ((qnameValue.qname.LocalName == name) && (qnameValue.qname.Ns == namespaceURI))
 					{
 						val = qnameValue.value;
 						break;
@@ -302,7 +296,7 @@ namespace LiquidTechnologies.FastInfoset
 				for (int n = 0; n < _currentNode.AttributeCount; n++)
 				{
 					FIParser.FINode.QNameValue qnameValue = _currentNode.Attributes[n];
-					if (qnameValue.qname.localName == name)
+					if (qnameValue.qname.LocalName == name)
 					{
 						val = qnameValue.value;
 						break;
@@ -355,9 +349,9 @@ namespace LiquidTechnologies.FastInfoset
 				string val = null;
 
 				if ((_nodeType == XmlNodeType.Attribute) || (_attributeValueIndex != -1))
-					val = _currentNode.Attributes[_currentAttributeIndex].qname.localName;
+					val = _currentNode.Attributes[_currentAttributeIndex].qname.LocalName;
 				else if (_currentNode != null)
-					val = _currentNode.QName.localName;
+					val = _currentNode.QName.LocalName;
 
 				// return String.Empty if not found
 				return ((val == null) ? String.Empty : val);
@@ -396,7 +390,7 @@ namespace LiquidTechnologies.FastInfoset
 				for (int n = 0; n < _currentNode.AttributeCount; n++)
 				{
 					FIParser.FINode.QNameValue qnameValue = _currentNode.Attributes[n];
-					if ((qnameValue.qname.localName == name) && (qnameValue.qname.ns == ns))
+					if ((qnameValue.qname.LocalName == name) && (qnameValue.qname.Ns == ns))
 					{
 						_nodeType = XmlNodeType.Attribute;
 						_currentAttributeIndex = index;
@@ -429,7 +423,7 @@ namespace LiquidTechnologies.FastInfoset
 				for (int n = 0; n < _currentNode.AttributeCount; n++)
 				{
 					FIParser.FINode.QNameValue qnameValue = _currentNode.Attributes[n];
-					if (qnameValue.qname.localName == name)
+					if (qnameValue.qname.LocalName == name)
 					{
 						_nodeType = XmlNodeType.Attribute;
 						_currentAttributeIndex = index;
@@ -540,9 +534,9 @@ namespace LiquidTechnologies.FastInfoset
 				string val = null;
 
 				if ((_nodeType == XmlNodeType.Attribute) || (_attributeValueIndex != -1))
-					val = _currentNode.Attributes[_currentAttributeIndex].qname.ns;
+					val = _currentNode.Attributes[_currentAttributeIndex].qname.Ns;
 				else if (_currentNode != null)
-					val = _currentNode.QName.ns;
+					val = _currentNode.QName.Ns;
 
 				// return String.Empty if not found
 				return ((val == null) ? String.Empty : val);
@@ -571,9 +565,9 @@ namespace LiquidTechnologies.FastInfoset
 				string val = null;
 
 				if ((_nodeType == XmlNodeType.Attribute) || (_attributeValueIndex != -1))
-					val = _currentNode.Attributes[_currentAttributeIndex].qname.prefix;
+					val = _currentNode.Attributes[_currentAttributeIndex].qname.Prefix;
 				else if (_currentNode != null)
-					val = _currentNode.QName.prefix;
+					val = _currentNode.QName.Prefix;
 
 				// return String.Empty if not found
 				return ((val == null) ? String.Empty : val);
@@ -693,9 +687,7 @@ namespace LiquidTechnologies.FastInfoset
 				return ((val == null) ? String.Empty : val);
 			}
 		}
-		#endregion
 
-		#region Member Variables
 		private ReadState _state;
 		private FIParser _parser;
 
@@ -704,6 +696,5 @@ namespace LiquidTechnologies.FastInfoset
 		private XmlNodeType _nodeType;
 		private string _currentAttributeValue;
 		private int _attributeValueIndex;
-		#endregion
 	}
 }

@@ -19,27 +19,21 @@
  *  http://www.liquid-technologies.com
  */
 
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace LiquidTechnologies.FastInfoset
 {
 	internal class FIEncodingAlgorithmManager
 	{
-		#region Consts
 		private const byte ENCODING_ALGORITHM_COUNT = 10;
 		private const byte EXTENDED_ENCODING_ALGORITHM_START = 32;
 		private const int EXTENDED_ENCODING_ALGORITHM_MAX = 256;
-		#endregion
 
-		#region Constructors
 		internal FIEncodingAlgorithmManager()
 		{
 			_internalEncodingAlgorithm = null;
 			_uriToEncodingMap = null;
 		}
-		#endregion
 
 		internal void Add(FIEncodingAlgorithm encoding)
 		{

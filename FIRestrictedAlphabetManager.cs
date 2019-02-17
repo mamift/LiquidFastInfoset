@@ -20,13 +20,11 @@
  */
 
 using System;
-using System.Text;
 
 namespace LiquidTechnologies.FastInfoset
 {
 	internal class FIRestrictedAlphabetManager
 	{
-		#region Consts
 		private const int GROW_ARRAY_SIZE = 2;
 
 		// Built In Restricted Alphabets
@@ -38,9 +36,7 @@ namespace LiquidTechnologies.FastInfoset
 		private const byte BUILT_IN_RESTRICTED_ALPHABET_COUNT = 2;
 		private const byte EXTENDED_RESTRICTED_ALPHABET_START = 16;
 		private const int EXTENDED_RESTRICTED_ALPHABET_MAX = 256;
-		#endregion
 
-		#region Constructors
 		internal FIRestrictedAlphabetManager()
 		{
 			// initialize array
@@ -56,9 +52,7 @@ namespace LiquidTechnologies.FastInfoset
 			alphabet.TableIndex = RESTRICTED_ALPHABET_DATE_TIME;
 			_restrictedAlphabets[++_restrictedAlphabetTop] = alphabet;
 		}
-		#endregion
 
-		#region Internal Interface
 		internal int Add(FIRestrictedAlphabet alphabet)
 		{
 			// set table index
@@ -106,11 +100,8 @@ namespace LiquidTechnologies.FastInfoset
 
 			return alphabet;
 		}
-		#endregion
 
-		#region Member Variables
 		private FIRestrictedAlphabet[] _restrictedAlphabets;
 		private int _restrictedAlphabetTop;
-		#endregion
 	}
 }

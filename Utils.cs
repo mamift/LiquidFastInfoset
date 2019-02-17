@@ -19,19 +19,17 @@
  *  http://www.liquid-technologies.com
  */
 
-using System;
-
 namespace LiquidTechnologies.FastInfoset
 {
 	/// <summary>
-	/// Summary description for Util.
+	/// Utility class.
 	/// </summary>
 	internal class Utils
 	{
 		internal static bool CompareByteArrays(byte[] array1, byte[] array2, int length)
 		{
 			// assumes both arrays are != null and are >= length
-			for (int i = 0; i < length; i++)
+			for (var i = 0; i < length; i++)
 			{
 				if (array1[i] != array2[i])
 				{

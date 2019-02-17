@@ -19,15 +19,12 @@
  *  http://www.liquid-technologies.com
  */
 
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace LiquidTechnologies.FastInfoset
 {
 	internal class FIReaderVocabulary
 	{
-		#region Constructors
 		internal FIReaderVocabulary()
 		{
 			// internal vocabulary constructor
@@ -79,10 +76,7 @@ namespace LiquidTechnologies.FastInfoset
 			_prefixNames.Add(FIConsts.FI_DEFAULT_PREFIX);
 			_namespaceNames.Add(FIConsts.FI_DEFAULT_NAMESPACE);
 		}
-		#endregion
 
-		#region Internal Interface
-		#region Add Methods
 		internal void AddRestrictedAlphabet(string alphabetChars)
 		{
 			_restrictedAlphabetManager.Add(new FIRestrictedAlphabet(alphabetChars));
@@ -192,9 +186,7 @@ namespace LiquidTechnologies.FastInfoset
 			if (map.Count == FIConsts.TWO_POWER_TWENTY)
 				map.Add(value, map.Count + 1);
 		}
-		#endregion
 
-		#region Lookup Value Methods
 		internal FIRestrictedAlphabet RestrictedAlphabet(int fiTableIndex)
 		{
 			return _restrictedAlphabetManager.Alphabet(fiTableIndex);
@@ -281,10 +273,7 @@ namespace LiquidTechnologies.FastInfoset
 
 			return _otherStrings[index];
 		}
-		#endregion
-		#endregion
 
-		#region Member Variables
 		private FIEncodingAlgorithmManager _encodingAlgorithmManager;
 		private FIRestrictedAlphabetManager _restrictedAlphabetManager;
 
@@ -300,6 +289,5 @@ namespace LiquidTechnologies.FastInfoset
 
 		private List<string> _otherNCNames;
 		private List<string> _otherStrings;
-		#endregion
 	}
 }

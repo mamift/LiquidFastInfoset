@@ -20,10 +20,7 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
-using System.Text;
 using System.Xml;
 
 namespace LiquidTechnologies.FastInfoset
@@ -66,7 +63,6 @@ namespace LiquidTechnologies.FastInfoset
     /// </example>
     public sealed class FIWriter : XmlWriter
     {
-        #region Enums
         /// <summary>
         /// All possible XML Declarations that can be used in a Fast Infoset
         /// </summary>
@@ -128,9 +124,7 @@ namespace LiquidTechnologies.FastInfoset
             AttributeContent = 7,
             Epilog = 8
         }
-        #endregion
 
-        #region Constructors
         /// <summary>
         /// Creates an instance of the FIWriter class class using the specified file.
         /// </summary>
@@ -175,9 +169,7 @@ namespace LiquidTechnologies.FastInfoset
             _depth = 0;
             _documentEnded = false;
         }
-        #endregion
 
-        #region Additional Interface Methods
         /// <summary>
         /// Writes a Fast Infoset declaration at the start of output stream.
         /// </summary>
@@ -270,10 +262,7 @@ namespace LiquidTechnologies.FastInfoset
                 throw ex;
             }
         }
-        #endregion
 
-        #region XmlWriter Overrides
-        #region General Methods
         /// <summary>
         /// Closes this stream and the underlying stream.
         /// </summary>
@@ -371,9 +360,7 @@ namespace LiquidTechnologies.FastInfoset
                 return state;
             }
         }
-        #endregion
 
-        #region Write Content Methods
         /// <summary>
         /// Writes out the specified binary bytes using the built-in "base64" encoding algorithm [X.891 Section 10.3].
         /// </summary>
@@ -638,9 +625,7 @@ namespace LiquidTechnologies.FastInfoset
         {
             throw new Exception("The method or operation is not implemented.");
         }
-        #endregion
 
-        #region Write Attribute Methods
         /// <summary>
         /// Writes the start of an attribute.
         /// </summary>
@@ -690,9 +675,7 @@ namespace LiquidTechnologies.FastInfoset
                 throw ex;
             }
         }
-        #endregion
 
-        #region Write Document Methods
         /// <summary>
         /// Writes a Fast Infoset declaration at the start of output stream.
         /// </summary>
@@ -760,9 +743,7 @@ namespace LiquidTechnologies.FastInfoset
                 throw ex;
             }
         }
-        #endregion
 
-        #region Write Element Methods
         /// <summary>
         /// Writes the specified start tag and associates it with the given namespace and prefix.
         /// </summary>
@@ -822,10 +803,7 @@ namespace LiquidTechnologies.FastInfoset
         {
             WriteEndElement();
         }
-        #endregion
-        #endregion
 
-        #region Private Methods
         private void ValidateState(FIItemType itemType)
         {
             byte validState = StateTable[(byte)itemType, (byte)_state];
@@ -875,9 +853,7 @@ namespace LiquidTechnologies.FastInfoset
                     break;
             }
         }
-        #endregion
 
-        #region Member Variables
         private InternalFIWriter _internalWriter;
         private InternalEncodingAlgorithm _internalEncodingAlgorithm;
         private FIState _state;
@@ -904,6 +880,5 @@ namespace LiquidTechnologies.FastInfoset
 			{	0,		0,		1,		1,		1,		0,		0,		0,		0		},	// Whitespace
 			{	0,		0,		1,		1,		1,		0,		0,		0,		0		},	// EncodedContent
 		};
-        #endregion
     }
 }

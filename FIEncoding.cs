@@ -20,7 +20,6 @@
  */
 
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Text;
@@ -77,7 +76,6 @@ namespace LiquidTechnologies.FastInfoset
 			_alphabetChars = alphabetChars;
 		}
 
-		#region Overrides
 		public override byte[] Encode(object data)
 		{
 			string strVal = data as string;
@@ -250,7 +248,6 @@ namespace LiquidTechnologies.FastInfoset
 
 			return buffer.ToString();
 		}
-		#endregion
 
 		internal string AlphabetChars { get { return _alphabetChars; } }
 
@@ -259,7 +256,6 @@ namespace LiquidTechnologies.FastInfoset
 
 	internal class InternalEncodingAlgorithm : FIEncoding
 	{
-		#region Enums
 		internal enum EncodingType
 		{
 			None,
@@ -274,16 +270,12 @@ namespace LiquidTechnologies.FastInfoset
 			UUIDEncoding,
 			CDataEncoding
 		}
-		#endregion
 
-		#region Constructors
 		internal InternalEncodingAlgorithm()
 		{
 			_type = EncodingType.None;
 		}
-		#endregion
 
-		#region Encode Methods
 		internal static byte[] ShortEncoding(short s)
 		{
 			byte[] data = new byte[2];
@@ -357,9 +349,7 @@ namespace LiquidTechnologies.FastInfoset
 			data[7] = (byte)(l & 0xFF);
 			return data;
 		}
-		#endregion
 
-		#region Decoder Methods
 		internal static String HexDecoding(byte[] data)
 		{
 			if (data == null)
@@ -605,9 +595,7 @@ namespace LiquidTechnologies.FastInfoset
 
 			return sb.ToString();
 		}
-		#endregion
 
-		#region Overrides
 		public override byte[] Encode(object val)
 		{
 			byte[] data = null;
@@ -697,7 +685,6 @@ namespace LiquidTechnologies.FastInfoset
 
 			return val;
 		}
-		#endregion
 
 		internal EncodingType Encoding
 		{

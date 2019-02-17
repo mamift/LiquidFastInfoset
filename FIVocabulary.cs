@@ -20,9 +20,6 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text;
 
 namespace LiquidTechnologies.FastInfoset
 {
@@ -48,7 +45,6 @@ namespace LiquidTechnologies.FastInfoset
 			_writer = new FIWriterVocabulary(uri, _encodingAlgorithmManager, _restrictedAlphabetManager);
 		}
 
-		#region Public Interface
 		/// <summary>
 		/// Adds an encoding algorithm to the vocabulary [X.891 Section 8.3].
 		/// </summary>
@@ -204,9 +200,7 @@ namespace LiquidTechnologies.FastInfoset
 			_reader.AddOtherString(otherString);
 			_writer.AddOtherString(otherString);
 		}
-		#endregion
 
-		#region Internal Interface
 		internal FIReaderVocabulary Reader
 		{
 			get { return _reader; }
@@ -216,14 +210,11 @@ namespace LiquidTechnologies.FastInfoset
 		{
 			get { return _writer; }
 		}
-		#endregion
 
-		#region Member Variables
 		private FIReaderVocabulary _reader;
 		private FIWriterVocabulary _writer;
 		private FIEncodingAlgorithmManager _encodingAlgorithmManager;
 		private FIRestrictedAlphabetManager _restrictedAlphabetManager;
-		#endregion
 	}
 
 	/// <summary>

@@ -20,7 +20,6 @@
  */
 
 using System;
-using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Xml;
@@ -34,7 +33,6 @@ namespace LiquidTechnologies.FastInfoset
 	{
 		private const int NS_GROW_SIZE = 10;
 
-		#region Inner Classes
 		internal class StreamBuffer
 		{
 			internal StreamBuffer(Stream input)
@@ -255,13 +253,9 @@ namespace LiquidTechnologies.FastInfoset
 			private QNameValue[] _attributes = null;
 			private int _attributeTop;
 		};
-		#endregion
 
-		#region Enums
 		private enum EnumStringOrIndex { isoiString, isoiIndex };
-		#endregion
 
-		#region Constructors
 		internal FIParser(Stream input, FIVocabularyManager vocabularyManager, XmlNameTable nameTable)
 		{
 			if (nameTable == null)
@@ -281,9 +275,7 @@ namespace LiquidTechnologies.FastInfoset
 			_namespaceNodes = new FINode.QNameValue[NS_GROW_SIZE];
 			_namespaceNodesTop = -1;
 		}
-		#endregion
 
-		#region Exposed Interface
 		internal FINode Read()
 		{
 			if (_currentNode == null)
@@ -320,9 +312,7 @@ namespace LiquidTechnologies.FastInfoset
 		{
 			get { return _nameTable; }
 		}
-		#endregion
 
-		#region Move Methods
 		// All methods use these methods to move through Fast infoset
 		private byte Move()
 		{
@@ -338,9 +328,7 @@ namespace LiquidTechnologies.FastInfoset
 
 			return read;
 		}
-		#endregion
 
-		#region Read Methods
 		// C.1
 		private void ReadHeader()
 		{
@@ -499,9 +487,7 @@ namespace LiquidTechnologies.FastInfoset
 					_currentNode.Init(XmlNodeType.EndElement, _depth--);
 			}
 		}
-		#endregion
 
-		#region Optional Data Methods
 
 		// C.2.4	
 		//	additional-data         SEQUENCE (SIZE(1..one-meg)) OF
@@ -577,7 +563,6 @@ namespace LiquidTechnologies.FastInfoset
 				AttributeNameSurrogates();
 		}
 
-		#region Initial Vocabulary Methods
 
 		// C.2.5.2
 		// external-vocabulary        URI OPTIONAL,
@@ -739,7 +724,6 @@ namespace LiquidTechnologies.FastInfoset
 //				_vocabulary.AddAttributeNameSurrogate(val);
 			}
 		}
-		#endregion
 
 		// C.2.6
 		private void Notations()
@@ -779,9 +763,7 @@ namespace LiquidTechnologies.FastInfoset
 		{
 			NonIdentifyingStringOrIndexBit1();
 		}
-		#endregion
 
-		#region Children Methods
 		/////////////////////////////////////////////////////////////////////////////////
 		// Children Methods
 
@@ -1056,9 +1038,7 @@ namespace LiquidTechnologies.FastInfoset
 			if (bHasPublicIdentifier)
 				IdentifyingStringOrIndex();
 		}
-		#endregion
 
-		#region Helper Parser Methods
 		// C.10
 		//	UnparsedEntity ::= SEQUENCE {
 		//		name                 IdentifyingStringOrIndex
@@ -1311,18 +1291,18 @@ namespace LiquidTechnologies.FastInfoset
 			{
 				if (IdentifyingStringOrIndex() == EnumStringOrIndex.isoiIndex)
 				{
-					_qname.prefix = _vocabulary.PrefixName(_lastValue - 1);
+					_qname.Prefix = _vocabulary.PrefixName(_lastValue - 1);
 					prefixIndex = _lastValue;
 				}
 				else
 				{
-					_qname.prefix = LastNameString;
-					prefixIndex = _vocabulary.AddPrefixName(_qname.prefix);
+					_qname.Prefix = LastNameString;
+					prefixIndex = _vocabulary.AddPrefixName(_qname.Prefix);
 				}
 			}
 			else
 			{
-				_qname.prefix = string.Empty;
+				_qname.Prefix = string.Empty;
 			}
 
 			// read optional namespace-name
@@ -1330,30 +1310,30 @@ namespace LiquidTechnologies.FastInfoset
 			{
 				if (IdentifyingStringOrIndex() == EnumStringOrIndex.isoiIndex)
 				{
-					_qname.ns = _vocabulary.NamespaceName(_lastValue - 1);
+					_qname.Ns = _vocabulary.NamespaceName(_lastValue - 1);
 					namespaceIndex = _lastValue;
 				}
 				else
 				{
-					_qname.ns = LastNameString;
-					namespaceIndex = _vocabulary.AddNamespaceName(_qname.ns);
+					_qname.Ns = LastNameString;
+					namespaceIndex = _vocabulary.AddNamespaceName(_qname.Ns);
 				}
 			}
 			else
 			{
-				_qname.ns = string.Empty;
+				_qname.Ns = string.Empty;
 			}
 
 			// read local-name
 			if (IdentifyingStringOrIndex() == EnumStringOrIndex.isoiIndex)
 			{
-				_qname.localName = _vocabulary.LocalName(_lastValue - 1);
+				_qname.LocalName = _vocabulary.LocalName(_lastValue - 1);
 				localNameIndex = _lastValue;
 			}
 			else
 			{
-				_qname.localName = LastNameString;
-				localNameIndex = _vocabulary.AddLocalName(_qname.localName);
+				_qname.LocalName = LastNameString;
+				localNameIndex = _vocabulary.AddLocalName(_qname.LocalName);
 			}
 		}
 
@@ -1824,9 +1804,7 @@ namespace LiquidTechnologies.FastInfoset
 				Array.Copy(val, _lastCharBuffer, _lastCharBufferUsed);
 			}
 		}
-		#endregion
 
-		#region Data Members
 		private XmlNameTable _nameTable = null;
 		private FIVocabularyManager _vocabularyManager = null;
 		private FIReaderVocabulary _vocabulary = null;
@@ -1849,6 +1827,5 @@ namespace LiquidTechnologies.FastInfoset
 		private int _lastValue = 0;
 		private bool _addToTable = false;
 		private XmlNodeType _lastType = XmlNodeType.None;
-		#endregion
 	}
 }
