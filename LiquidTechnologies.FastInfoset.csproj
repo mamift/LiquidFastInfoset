@@ -97,34 +97,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FIConsts.cs" />
-    <Compile Include="FIEncoder.FIAttribute.cs" />
-    <Compile Include="FIEncoder.FIElement.cs" />
-    <Compile Include="FIEncoding.cs" />
-    <Compile Include="FIEncodingAlgorithm.cs" />
-    <Compile Include="FIEncodingAlgorithmManager.cs" />
-    <Compile Include="FIParser.FINode.cs" />
-    <Compile Include="FIParser.StreamBuffer.cs" />
-    <Compile Include="FIRestrictedAlphabet.cs" />
-    <Compile Include="FIVocabulary.cs" />
-    <Compile Include="FIParser.cs" />
-    <Compile Include="FIReader.cs" />
-    <Compile Include="FIReaderVocabulary.cs" />
-    <Compile Include="FIRestrictedAlphabetManager.cs" />
-    <Compile Include="FIWriter.cs" />
-    <Compile Include="FIWriterVocabulary.cs" />
-    <Compile Include="FIEncoder.cs" />
-    <Compile Include="FIWriterVocabulary.QNameArray.cs" />
-    <Compile Include="FIWriterVocabulary.QNameIndex.cs" />
-    <Compile Include="FIWriterVocabulary.QNameIndexLookup.cs" />
-    <Compile Include="InternalEncodingAlgorithm.cs" />
-    <Compile Include="InternalFIWriter.cs" />
-    <Compile Include="InternalFIWriter.NamespaceManager.cs" />
-    <Compile Include="LtFastInfosetException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="QualifiedName.cs" />
-    <Compile Include="Utils.cs" />
-    <Compile Include="FIVocabularyManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
@@ -154,9 +127,9 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="LICENSE.txt" />
     <Content Include="README.txt" />
   </ItemGroup>
+  <Import Project="..\LiquidTechnologies.FastInfoset.Shared\LiquidTechnologies.FastInfoset.Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
