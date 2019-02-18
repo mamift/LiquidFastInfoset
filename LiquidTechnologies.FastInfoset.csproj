@@ -98,8 +98,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FIConsts.cs" />
+    <Compile Include="FIEncoder.FIAttribute.cs" />
+    <Compile Include="FIEncoder.FIElement.cs" />
     <Compile Include="FIEncoding.cs" />
+    <Compile Include="FIEncodingAlgorithm.cs" />
     <Compile Include="FIEncodingAlgorithmManager.cs" />
+    <Compile Include="FIParser.FINode.cs" />
+    <Compile Include="FIParser.StreamBuffer.cs" />
+    <Compile Include="FIRestrictedAlphabet.cs" />
     <Compile Include="FIVocabulary.cs" />
     <Compile Include="FIParser.cs" />
     <Compile Include="FIReader.cs" />
@@ -108,7 +114,12 @@
     <Compile Include="FIWriter.cs" />
     <Compile Include="FIWriterVocabulary.cs" />
     <Compile Include="FIEncoder.cs" />
+    <Compile Include="FIWriterVocabulary.QNameArray.cs" />
+    <Compile Include="FIWriterVocabulary.QNameIndex.cs" />
+    <Compile Include="FIWriterVocabulary.QNameIndexLookup.cs" />
+    <Compile Include="InternalEncodingAlgorithm.cs" />
     <Compile Include="InternalFIWriter.cs" />
+    <Compile Include="InternalFIWriter.NamespaceManager.cs" />
     <Compile Include="LtFastInfosetException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QualifiedName.cs" />

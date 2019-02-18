@@ -24,125 +24,9 @@ using System.Collections.Generic;
 
 namespace LiquidTechnologies.FastInfoset
 {
-	internal class FIWriterVocabulary
+	internal partial class FIWriterVocabulary
 	{
-		internal struct QNameIndex
-		{
-			internal void Init(string prefix, string ns, string localName)
-			{
-				Index = -1;
-				Qname.Init(prefix, ns, localName);
-			}
-
-			internal QualifiedName Qname;
-			internal int Index;
-		}
-
-		internal class QNameIndexLookup
-		{
-			internal QNameIndexLookup(QNameIndex qname)
-			{
-				_qnames = new QNameIndex[1];
-				_qnames[0] = qname;
-			}
-
-			internal void AddQNameIndex(QNameIndex qname)
-			{
-				int len = _qnames.Length;
-				QNameIndex[] buffer = new QNameIndex[len + 1];
-				Array.Copy(_qnames, buffer, len);
-				_qnames = buffer;
-				_qnames[len] = qname;
-			}
-
-			internal bool TryGetIndex(string prefix, string ns, out int index)
-			{
-				for (int n = 0; n < _qnames.Length; n++)
-				{
-					QNameIndex qnameIndex = _qnames[n];
-					if ((qnameIndex.Qname.Prefix == prefix) && (qnameIndex.Qname.Ns == ns))
-					{
-						index = qnameIndex.Index;
-						return true;
-					}
-				}
-
-				index = -1;
-				return false;
-			}
-
-			internal bool Contains(string prefix, string ns)
-			{
-				for (int n = 0; n < _qnames.Length; n++)
-				{
-					QNameIndex qnameIndex = _qnames[n];
-					if ((qnameIndex.Qname.Prefix == prefix) && (qnameIndex.Qname.Ns == ns))
-						return true;
-				}
-
-				return false;
-			}
-
-			private QNameIndex[] _qnames;
-		}
-
-		internal class QNameArray
-		{
-			internal QNameArray()
-			{
-				_lastIndex = 0;
-				_nameQNameIndexLookupMap = new Dictionary<string, QNameIndexLookup>();
-			}
-
-			internal QNameArray(QNameArray qnameArray)
-			{
-				_lastIndex = qnameArray._lastIndex;
-				_nameQNameIndexLookupMap = qnameArray._nameQNameIndexLookupMap;
-			}
-
-			internal bool TryAddQName(QNameIndex qnameIndex, out int index)
-			{
-				QNameIndexLookup qnameLookup;
-				if (_nameQNameIndexLookupMap.TryGetValue(qnameIndex.Qname.LocalName, out qnameLookup))
-				{
-					// found QNameIndexLookup for localName, so try match prfix and namespace
-					if (qnameLookup.TryGetIndex(qnameIndex.Qname.Prefix, qnameIndex.Qname.Ns, out index))
-						return false;
-
-					// match not found, so add a new entry
-					_lastIndex++;
-					qnameIndex.Index = _lastIndex;
-					qnameLookup.AddQNameIndex(qnameIndex);
-				}
-				else
-				{
-					// match not found, so add a new lookup entry for localName
-					_lastIndex++;
-					qnameIndex.Index = _lastIndex;
-					_nameQNameIndexLookupMap.Add(qnameIndex.Qname.LocalName, new QNameIndexLookup(qnameIndex));
-				}
-
-				index = -1;
-				return true;
-			}
-
-			internal bool Contains(QNameIndex qnameIndex)
-			{
-				QNameIndexLookup qnameLookup;
-				if (_nameQNameIndexLookupMap.TryGetValue(qnameIndex.Qname.LocalName, out qnameLookup))
-				{
-					// found QNameIndexLookup
-					return qnameLookup.Contains(qnameIndex.Qname.Prefix, qnameIndex.Qname.Ns);
-				}
-
-				return false;
-			}
-
-			private Dictionary<string, QNameIndexLookup> _nameQNameIndexLookupMap;
-			private int _lastIndex;
-		}
-
-		internal enum StringEncoding
+        internal enum StringEncoding
 		{
 			UTF8,
 			UTF16BE
@@ -157,7 +41,9 @@ namespace LiquidTechnologies.FastInfoset
 			Init();
 		}
 
-		internal FIWriterVocabulary(Uri uri, FIEncodingAlgorithmManager encodingAlgorithmManager, FIRestrictedAlphabetManager restrictedAlphabetManager)
+		internal FIWriterVocabulary(Uri uri,
+            FIEncodingAlgorithmManager encodingAlgorithmManager,
+            FIRestrictedAlphabetManager restrictedAlphabetManager)
 		{
 			if (uri != null)
 				_uri = uri.ToString();
