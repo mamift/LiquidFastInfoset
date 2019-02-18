@@ -127,6 +127,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="LICENSE.txt" />
     <Content Include="README.txt" />
   </ItemGroup>
   <Import Project="..\LiquidTechnologies.FastInfoset.Shared\LiquidTechnologies.FastInfoset.Shared.projitems" Label="Shared" />
