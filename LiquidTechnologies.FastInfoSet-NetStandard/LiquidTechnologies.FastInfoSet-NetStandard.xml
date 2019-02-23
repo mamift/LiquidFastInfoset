@@ -1,0 +1,845 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>LiquidTechnologies.FastInfoSet-NetStandard</name>
+    </assembly>
+    <members>
+        <member name="T:LiquidTechnologies.FastInfoset.FIConsts">
+            <summary>
+            Summary description for FastInfosetConsts.
+            </summary>
+        </member>
+        <member name="T:LiquidTechnologies.FastInfoset.FIEncoding">
+            <summary>
+            Abstract base class of Fast Infoset encodings <see cref="T:LiquidTechnologies.FastInfoset.FIRestrictedAlphabet"/> and <see cref="T:LiquidTechnologies.FastInfoset.FIEncodingAlgorithm"/>.
+            </summary>
+        </member>
+        <member name="M:LiquidTechnologies.FastInfoset.FIEncoding.#ctor">
+            <summary>
+            Creates an instance of FIEncoding.
+            </summary>
+        </member>
+        <member name="M:LiquidTechnologies.FastInfoset.FIEncoding.Encode(System.Object)">
+            <summary>
+            Method used to encode the data in the derived concrete class.
+            </summary>
+            <param name="data">Data to encode</param>
+            <returns>Encoded data.</returns>
+            <remarks>The data to encode should be of a type expected by the specific derived concrete class.</remarks>
+        </member>
+        <member name="M:LiquidTechnologies.FastInfoset.FIEncoding.Decode(System.Byte[])">
+            <summary>
+            Method used to decode the data in the derived concrete class. 
+            </summary>
+            <param name="data">Data to decode</param>
+            <returns>Decoded data</returns>
+            <remarks>The decoded data must always return as a string value as this will be read by the FIReader as if it were over a standard XML text document. The string returned may be string representation of binary data, e.g. Hex or Base64 encoded. The client would be expected to decode to binary data as required in the same way they would if they were reading an plain XML text document.</remarks>
+        </member>
+        <member name="T:LiquidTechnologies.FastInfoset.FIEncodingAlgorithm">
+            <summary>
+            Base class for implementing custom Encoding Algorithms [X.891 Section 8.3].
+            </summary>
+        </member>
+        <member name="M:LiquidTechnologies.FastInfoset.FIEncodingAlgorithm.#ctor(System.Uri)">
+            <summary>
+            Creats an instance of FIEncodingAlgorithm using the specified URI.
+            </summary>
+            <param name="uri">URI used as the unique identifier for this encoding.</param>
+            <remarks><para>Each entry in this table specifies the encoding of a character string with some defined characteristics into an octet string [X.891 Section 7.17.7].</para><para>NOTE – The defined characteristics may refer to the length of the string, to the characters appearing in it, or to an arbitrarily complex pattern of characters.  In general, a given encoding algorithm applies only to a special and defined subset of the ISO/IEC 10646 character strings.</para></remarks>
+        </member>
+        <member name="P:LiquidTechnologies.FastInfoset.FIEncodingAlgorithm.URI">
+            <summary>
+            Uniquely identifies this Encoding Algorithm
+            </summary>
+        </member>
+        <member name="T:LiquidTechnologies.FastInfoset.FIParser">
+            <summary>
+            Summary description for FastInfosetReader.
+            </summary>
+        </member>
+        <member name="T:LiquidTechnologies.FastInfoset.FIReader">
+            <summary>
+            Represents a reader that provides fast, non-cached, forward-only access to XML binary encoded data that conforms to the ITU-T: Fast infoset X.891 (05/2005) recommendation.
+            </summary>
+            <remarks>The FIReader class derives from the System.Xml.XmlReader .Net Framework class and supports the abstract methods required to integrate with other .Net Framework XML classes such as System.Xml.XmlDocument.</remarks>
+            <seealso cref="T:LiquidTechnologies.FastInfoset.FIWriter"/>
+            <example>
+            <code>
+            string filename1 = new string(@"c:\MyFile.xml");
+            XmlDocument doc = new XmlDocument();
+            
+            // Read standard XML file into an XmlDocument
+            XmlReader reader = XmlReader.Create(new XmlTextReader(filename1), null);
+            doc.Load(reader);
+            reader.Close();
+            
+            // Write XML to file encoded as Fast Infoset
+            XmlWriter fiWriter = XmlWriter.Create(new FIWriter(filename1 + ".finf"));
+            doc.WriteTo(fiWriter);
+            fiWriter.Close();
+            
+            string filename2 = new string(@"c:\MyFile2.xml");
+            XmlDocument doc2 = new XmlDocument();
+            
+            // Read Fast Infoset encoded XML file into an XmlDocument
+            XmlReader fiReader = XmlReader.Create(new FIReader(filename1 + ".finf"), null);
+            doc2.Load(fiReader);
+            fiReader.Close();
+            
+            // Write standard XML to file
+            XmlWriter writer = XmlWriter.Create(new XmlTextWriter(filename2, Encoding.Default));
+            doc2.WriteTo(writer);
+            writer.Close();
+            </code>
+            </example>
+        </member>
+        <member name="M:LiquidTechnologies.FastInfoset.FIReader.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the XmlTextReader class with the specified file.
+            </summary>
+            <param name="url">The URL for the file containing the XML data.</param>
+            <exception cref="T:System.ArgumentNullException">url is a null reference (Nothing in Visual Basic)</exception>
+            <exception cref="T:System.ArgumentException">url is an empty string.</exception>
+            <exception cref="T:System.UriFormatException">url is not a valid URI.</exception>
+            <exception cref="T:System.Exception">There is a runtime error (for example, an interrupted server connection).</exception>
+        </member>
+        <member name="M:LiquidTechnologies.FastInfoset.FIReader.#ctor(System.String,LiquidTechnologies.FastInfoset.FIVocabularyManager)">
+            <summary>
+            Initializes a new instance of the XmlTextReader class with the specified file.
+            </summary>
+            <param name="url">The URL for the file containing the XML data.</param>
+            <param name="vocabularyManager">A <see cref="T:LiquidTechnologies.FastInfoset.FIVocabularyManager"/> containing a mapping of URIs to <see cref="T:LiquidTechnologies.FastInfoset.FIExternalVocabulary"/> objects. If the Fast Infoset to be read references an External Vocabulary, the URI used must exist with the provided vocabulary manager.</param>
+            <exception cref="T:System.ArgumentNullException">url is a null reference (Nothing in Visual Basic)</exception>
+            <exception cref="T:System.ArgumentException">url is an empty string.</exception>
+            <exception cref="T:System.UriFormatException">url is not a valid URI.</exception>
+            <exception cref="T:System.Exception">There is a runtime error (for example, an interrupted server connection).</exception>
+            <seealso cref="T:LiquidTechnologies.FastInfoset.FIVocabularyManager"/>
+            <seealso cref="T:LiquidTechnologies.FastInfoset.FIExternalVocabulary"/>
+        </member>
+        <member name="M:LiquidTechnologies.FastInfoset.FIReader.#ctor(System.String,LiquidTechnologies.FastInfoset.FIVocabularyManager,System.Xml.XmlNameTable)">
+            <summary>
+            Initializes a new instance of the XmlTextReader class with the specified file.
+            </summary>
+            <param name="url">The URL for the file containing the XML data.</param>
+            <param name="vocabularyManager">A <see cref="T:LiquidTechnologies.FastInfoset.FIVocabularyManager"/> containing a mapping of URIs to <see cref="T:LiquidTechnologies.FastInfoset.FIExternalVocabulary"/> objects. If the Fast Infoset to be read references an External Vocabulary, the URI used must exist with the provided vocabulary manager.</param>
+            <param name="nameTable">An <see cref="T:System.Xml.XmlNameTable"/> to write strings into.</param>
+            <exception cref="T:System.ArgumentNullException">url is a null reference (Nothing in Visual Basic)</exception>
+            <exception cref="T:System.ArgumentException">url is an empty string.</exception>
+            <exception cref="T:System.UriFormatException">url is not a valid URI.</exception>
+            <exception cref="T:System.Exception">There is a runtime error (for example, an interrupted server connection).</exception>
+            <seealso cref="T:LiquidTechnologies.FastInfoset.FIVocabularyManager"/>
+            <seealso cref="T:LiquidTechnologies.FastInfoset.FIExternalVocabulary"/>
+        </member>
+        <member name="M:LiquidTechnologies.FastInfoset.FIReader.#ctor(System.IO.Stream)">
+            <summary>
+            Initializes a new instance of the XmlTextReader class with the specified stream.
+            </summary>
+            <param name="input">The stream containing the XML data to read.</param>
+            <exception cref="T:System.ArgumentNullException">input is a null reference (Nothing in Visual Basic).</exception>
+        </member>
+        <member name="M:LiquidTechnologies.FastInfoset.FIReader.#ctor(System.IO.Stream,LiquidTechnologies.FastInfoset.FIVocabularyManager)">
+            <summary>
+            Initializes a new instance of the XmlTextReader class with the specified stream.
+            </summary>
+            <param name="input">The stream containing the XML data to read.</param>
+            <param name="vocabularyManager">A <see cref="T:LiquidTechnologies.FastInfoset.FIVocabularyManager"/> containing a mapping of URIs to <see cref="T:LiquidTechnologies.FastInfoset.FIExternalVocabulary"/> objects. If the Fast Infoset to be read references an External Vocabulary, the URI used must exist with the provided vocabulary manager.</param>
+            <exception cref="T:System.ArgumentNullException">input is a null reference (Nothing in Visual Basic).</exception>
+            <seealso cref="T:LiquidTechnologies.FastInfoset.FIVocabularyManager"/>
+            <seealso cref="T:LiquidTechnologies.FastInfoset.FIExternalVocabulary"/>
+        </member>
+        <member name="M:LiquidTechnologies.FastInfoset.FIReader.#ctor(System.IO.Stream,LiquidTechnologies.FastInfoset.FIVocabularyManager,System.Xml.XmlNameTable)">
+            <summary>
+            Initializes a new instance of the XmlTextReader class with the specified stream.
+            </summary>
+            <param name="input">The stream containing the XML data to read.</param>
+            <param name="vocabularyManager">A <see cref="T:LiquidTechnologies.FastInfoset.FIVocabularyManager"/> containing a mapping of URIs to <see cref="T:LiquidTechnologies.FastInfoset.FIExternalVocabulary"/> objects. If the Fast Infoset to be read references an External Vocabulary, the URI used must exist with the provided vocabulary manager.</param>
+            <param name="nameTable">An <see cref="T:System.Xml.XmlNameTable"/> to write strings into.</param>
+            <exception cref="T:System.ArgumentNullException">input is a null reference (Nothing in Visual Basic).</exception>
+            <seealso cref="T:LiquidTechnologies.FastInfoset.FIVocabularyManager"/>
+            <seealso cref="T:LiquidTechnologies.FastInfoset.FIExternalVocabulary"/>
+        </member>
+        <member name="P:LiquidTechnologies.FastInfoset.FIReader.AttributeCount">
+            <summary>
+            Gets the number of attributes on the current node.
+            </summary>
+            <value>The number of attributes on the current node.</value>
+            <remarks>This property is relevant to Element, DocumentType and XmlDeclaration nodes only. (Other node types do not have attributes.)</remarks>
+        </member>
+        <member name="P:LiquidTechnologies.FastInfoset.FIReader.BaseURI">
+            <summary>
+            The method or operation is not implemented.
+            </summary>
+            <value>An empty string.</value>
+        </member>
+        <member name="M:LiquidTechnologies.FastInfoset.FIReader.Close">
+            <summary>
+            Changes the <see cref="P:LiquidTechnologies.FastInfoset.FIReader.ReadState"/> to Closed.
+            </summary>
+            <remarks><para>This method also releases any resources held while reading. If this reader was constructed using a stream, this method also calls Close on the underlying stream.</para>If Close has already been called, no action is performed.</remarks>
+        </member>
+        <member name="P:LiquidTechnologies.FastInfoset.FIReader.Depth">
+            <summary>
+            Gets the depth of the current node in the XML document.
+            </summary>
+            <value>The depth of the current node in the XML document.</value>
+        </member>
+        <member name="P:LiquidTechnologies.FastInfoset.FIReader.EOF">
+            <summary>
+            Gets a value indicating whether the reader is positioned at the end of the stream.
+            </summary>
+            <value>true if the reader is positioned at the end of the stream; otherwise, false.</value>
+        </member>
+        <member name="M:LiquidTechnologies.FastInfoset.FIReader.GetAttribute(System.Int32)">
+            <summary>
+            Gets the value of the attribute with the specified index.
+            </summary>
+            <param name="i">The index of the attribute. The index is zero-based. (The first attribute has index 0.)</param>
+            <returns>The value of the specified attribute.</returns>
+            <remarks>This method does not move the reader.</remarks>
+        </member>
+        <member name="M:LiquidTechnologies.FastInfoset.FIReader.GetAttribute(System.String,System.String)">
+            <summary>
+            Gets the value of the attribute with the specified local name and namespace URI.
+            </summary>
+            <param name="name">The local name of the attribute.</param>
+            <param name="namespaceURI">The namespace URI of the attribute.</param>
+            <returns>The value of the specified attribute. If the attribute is not found, a null reference (Nothing in Visual Basic) is returned. This method does not move the reader.</returns>
+            <remarks>This method does not move the reader.</remarks>
+        </member>
+        <member name="M:LiquidTechnologies.FastInfoset.FIReader.GetAttribute(System.String)">
+            <summary>
+            Gets the value of the attribute with the specified name.
+            </summary>
+            <param name="name">The qualified name of the attribute.</param>
+            <returns>The value of the specified attribute. If the attribute is not found, a null reference (Nothing in Visual Basic) is returned.</returns>
+            <remarks>This method does not move the reader.</remarks>
+        </member>
+        <member name="P:LiquidTechnologies.FastInfoset.FIReader.HasValue">
+            <summary>
+            Gets a value indicating whether the current node can have a <see cref="P:LiquidTechnologies.FastInfoset.FIReader.Value"/> other than String.Empty. 
+            </summary>
+            <value>true if the node on which the reader is currently positioned can have a Value; otherwise, false.</value>
+            <remarks>This property is relevant to Attribute, CDATA, Comment, ProcessingInstruction, Text and XmlDeclaration</remarks>
+        </member>
+        <member name="P:LiquidTechnologies.FastInfoset.FIReader.IsEmptyElement">
+            <summary>
+            The method or operation is not implemented.
+            </summary>
+            <value>false</value>
+        </member>
+        <member name="P:LiquidTechnologies.FastInfoset.FIReader.LocalName">
+            <summary>
+            Gets the local name of the current node.
+            </summary>
+            <value>The name of the current node with the prefix removed. For example, LocalName is book for the element &lt;bk:book&gt;. For node types that do not have a name (like Text, Comment, and so on), this property returns String.Empty.</value>
+        </member>
+        <member name="M:LiquidTechnologies.FastInfoset.FIReader.LookupNamespace(System.String)">
+            <summary>
+            The method or operation is not implemented.
+            </summary>
+            <param name="prefix">The prefix whose namespace URI you want to resolve. To match the default namespace, pass an empty string.</param>
+            <returns>The namespace URI to which the prefix maps or a null reference (Nothing in Visual Basic) if no matching prefix is found.</returns>
+            <exception cref="T:System.ArgumentNullException">prefix value is a null reference (Nothing in Visual Basic).</exception>
+            <exception cref="T:System.Exception">The method or operation is not implemented.</exception>
+        </member>
+        <member name="M:LiquidTechnologies.FastInfoset.FIReader.MoveToAttribute(System.String,System.String)">
+            <summary>
+            Moves to the attribute with the specified local name and namespace URI.
+            </summary>
+            <param name="name">The local name of the attribute.</param>
+            <param name="ns">The namespace URI of the attribute.</param>
+            <returns>true if the attribute is found; otherwise, false. If false, the reader's position does not change.</returns>
+            <remarks>After calling MoveToAttribute, the <see cref="P:LiquidTechnologies.FastInfoset.FIReader.LocalName"/>, <see cref="P:LiquidTechnologies.FastInfoset.FIReader.NamespaceURI"/>, and <see cref="P:LiquidTechnologies.FastInfoset.FIReader.Prefix"/> properties reflects the properties of that attribute.</remarks>
+        </member>
+        <member name="M:LiquidTechnologies.FastInfoset.FIReader.MoveToAttribute(System.String)">
+            <summary>
+            Moves to the attribute with the specified name.
+            </summary>
+            <param name="name">The qualified name of the attribute. </param>
+            <returns>true if the attribute is found; otherwise, false. If false, the reader's position does not change.</returns>
+            <remarks>After calling MoveToAttribute, the <see cref="P:LiquidTechnologies.FastInfoset.FIReader.LocalName"/>, <see cref="P:LiquidTechnologies.FastInfoset.FIReader.NamespaceURI"/>, and <see cref="P:LiquidTechnologies.FastInfoset.FIReader.Prefix"/> properties reflects the properties of that attribute.</remarks>
+        </member>
+        <member name="M:LiquidTechnologies.FastInfoset.FIReader.MoveToAttribute(System.Int32)">
+            <summary>
+            Moves to the attribute with the specified index.
+            </summary>
+            <param name="i">The index of the attribute.</param>
+            <remarks>After calling MoveToAttribute, the <see cref="P:LiquidTechnologies.FastInfoset.FIReader.LocalName"/>, <see cref="P:LiquidTechnologies.FastInfoset.FIReader.NamespaceURI"/>, and <see cref="P:LiquidTechnologies.FastInfoset.FIReader.Prefix"/> properties reflects the properties of that attribute.</remarks>
+            <exception cref="T:System.ArgumentOutOfRangeException">The i parameter is less than 0 or greater than or equal to AttributeCount.</exception>
+        </member>
+        <member name="M:LiquidTechnologies.FastInfoset.FIReader.MoveToElement">
+            <summary>
+            Moves to the element that contains the current attribute node.
+            </summary>
+            <returns>true if the reader is positioned on an attribute (the reader moves to the element that owns the attribute); false if the reader is not positioned on an attribute (the position of the reader does not change).</returns>
+            <remarks>Use this method to return to an element after navigating through its attributes. This method moves the reader to one of the following node types: Element, DocumentType, or XmlDeclaration.</remarks>
+        </member>
+        <member name="M:LiquidTechnologies.FastInfoset.FIReader.MoveToFirstAttribute">
+            <summary>
+            Moves to the first attribute.
+            </summary>
+            <returns>true if an attribute exists (the reader moves to the first attribute); otherwise, false (the position of the reader does not change).</returns>
+        </member>
+        <member name="M:LiquidTechnologies.FastInfoset.FIReader.MoveToNextAttribute">
+            <summary>
+            Moves to the next attribute.
+            </summary>
+            <returns>true if there is a next attribute; false if there are no more attributes.</returns>
+            <remarks>If the current node is an element node, this method is equivalent to <see cref="M:LiquidTechnologies.FastInfoset.FIReader.MoveToFirstAttribute"/>. If MoveToNextAttribute returns true, the reader moves to the next attribute; otherwise, the position of the reader does not change.</remarks>
+        </member>
+        <member name="P:LiquidTechnologies.FastInfoset.FIReader.NameTable">
+            <summary>
+            The <see cref="T:System.Xml.XmlNameTable"/> associated with this implementation
+            </summary>
+            <exception cref="T:System.Exception">The method or operation is not implemented.</exception>
+        </member>
+        <member name="P:LiquidTechnologies.FastInfoset.FIReader.NamespaceURI">
+            <summary>
+            Gets the namespace URI (as defined in the W3C Namespace specification) of the node on which the reader is positioned.
+            </summary>
+            <value>The namespace URI of the current node; otherwise an empty string.</value>
+        </member>
+        <member name="P:LiquidTechnologies.FastInfoset.FIReader.NodeType">
+            <summary>
+            Gets the type of the current node.
+            </summary>
+            <value>One of the <see cref="T:System.Xml.XmlNodeType"/> values representing the type of the current node.</value>
+            <remarks>This property never returns the following XmlNodeType types: Document, DocumentFragment, Entity, EndEntity, or Notation.</remarks>
+        </member>
+        <member name="P:LiquidTechnologies.FastInfoset.FIReader.Prefix">
+            <summary>
+            Gets the namespace prefix associated with the current node.
+            </summary>
+            <value>The namespace prefix associated with the current node.</value>
+        </member>
+        <member name="M:LiquidTechnologies.FastInfoset.FIReader.Read">
+            <summary>
+            Reads the next node from the stream.
+            </summary>
+            <returns>true if the next node was read successfully; false if there are no more nodes to read.</returns>
+            <exception cref="T:LiquidTechnologies.FastInfoset.LtFastInfosetException">An error occurred while parsing the Fast Infoset.</exception>
+            <remarks>When a reader is first created and initialized, there is no information available. You must call Read to read the first node.</remarks>
+        </member>
+        <member name="M:LiquidTechnologies.FastInfoset.FIReader.ReadAttributeValue">
+            <summary>
+            Parses the attribute value into one or more Text, EntityReference, or EndEntity nodes.
+            </summary>
+            <returns>true if there are nodes to return. false if the reader is not positioned on an attribute node when the initial call is made or if all the attribute values have been read. An empty attribute, such as, misc="", returns true with a single node with a value of String.Empty.</returns>
+            <remarks>Use this method after calling MoveToAttribute to read through the text or entity reference nodes that make up the attribute value. The Depth of the attribute value nodes is one plus the <see cref="P:LiquidTechnologies.FastInfoset.FIReader.Depth"/> of the attribute node; it increments and decrements by one when you step into and out of general entity references.</remarks>
+        </member>
+        <member name="P:LiquidTechnologies.FastInfoset.FIReader.ReadState">
+            <summary>
+            Gets the state of the reader.
+            </summary>
+            <value>One of the ReadState values.</value>
+        </member>
+        <member name="M:LiquidTechnologies.FastInfoset.FIReader.ResolveEntity">
+            <summary>
+            The method or operation is not implemented.
+            </summary>
+            <exception cref="T:System.Exception">The method or operation is not implemented.</exception>
+        </member>
+        <member name="P:LiquidTechnologies.FastInfoset.FIReader.Value">
+            <summary>
+            Gets the text value of the current node.
+            </summary>
+            <value>The value returned depends on the <see cref="P:LiquidTechnologies.FastInfoset.FIReader.NodeType"/> of the node. The following table lists node types that have a value to return. All other node types return String.Empty.
+            <para>Attribute - The value of the attribute.</para>
+            <para>CDATA - The content of the CDATA section.</para>
+            <para>Comment - The content of the comment.</para>
+            <para>DocumentType - The internal subset.</para>
+            <para>ProcessingInstruction - The entire content, excluding the target.</para>
+            <para>SignificantWhitespace - The white space within an xml:space= 'preserve' scope.</para>
+            <para>Text - The content of the text node.</para>
+            <para>Whitespace - The white space between markup.</para>
+            <para>XmlDeclaration - The content of the declaration.</para></value>
+        </member>
+        <member name="T:LiquidTechnologies.FastInfoset.FIRestrictedAlphabet">
+            <summary>
+            Implementation of Fast Infoset Restricted Alphabet [X.891 Section 8.2].
+            </summary>
+        </member>
+        <member name="M:LiquidTechnologies.FastInfoset.FIRestrictedAlphabet.#ctor(System.String)">
+            <summary>
+            Creates an instance of FIRestrictedAlphabet using the specified characters.
+            </summary>
+            <param name="alphabetChars">Characters that form the Restricted Alphabet.</param>
+            <remarks><para>Each entry in the restricted alphabet table shall be an ordered set of distinct ISO/IEC 10646 characters of any size between 2 and 220 characters.</para><para>NOTE – A restricted alphabet permits a compact encoding of any character string consisting entirely of characters from that set, through the assignment of progressive integers to the characters in the set and the use of those integers to encode the characters of the string [X.891 Section 7.17.6].</para></remarks>
+        </member>
+        <member name="T:LiquidTechnologies.FastInfoset.FIVocabulary">
+            <summary>
+            Implementation of a set of Fast Infoset vocabulary tables.
+            </summary>
+        </member>
+        <member name="M:LiquidTechnologies.FastInfoset.FIVocabulary.#ctor">
+            <summary>
+            Initializes a new instance of the FIVocabulary class with the specified URI [X.891 Section 7.2.11].
+            </summary>
+        </member>
+        <member name="M:LiquidTechnologies.FastInfoset.FIVocabulary.AddEncodingAlgorithm(LiquidTechnologies.FastInfoset.FIEncodingAlgorithm)">
+            <summary>
+            Adds an encoding algorithm to the vocabulary [X.891 Section 8.3].
+            </summary>
+            <param name="alogrithm">Encoding alogrithm to add.</param>
+            <seealso cref="T:LiquidTechnologies.FastInfoset.FIEncodingAlgorithm"/>
+        </member>
+        <member name="M:LiquidTechnologies.FastInfoset.FIVocabulary.AddRestrictedAlphabet(System.String)">
+            <summary>
+            Adds a restricted alphabet to the vocabulary [X.891 Section 8.2].
+            </summary>
+            <param name="alphabetChars">Characters that make up the restricted alphabet.</param>
+            <returns>Table index of new restricted alphabet.</returns>
+        </member>
+        <member name="M:LiquidTechnologies.FastInfoset.FIVocabulary.AddAttributeNameSurrogate(System.String)">
+            <summary>
+            Adds an attribute name surrogate to the vocabulary [X.891 Section 8.5].
+            </summary>
+            <param name="localName">The Attribute's Local Name.</param>
+        </member>
+        <member name="M:LiquidTechnologies.FastInfoset.FIVocabulary.AddAttributeNameSurrogate(System.String,System.String)">
+            <summary>
+            Adds an attribute name surrogate to the vocabulary [X.891 Section 8.5].
+            </summary>
+            <param name="ns">The Attribute's Namespace</param>
+            <param name="localName">The Attribute's Local Name.</param>
+        </member>
+        <member name="M:LiquidTechnologies.FastInfoset.FIVocabulary.AddAttributeNameSurrogate(System.String,System.String,System.String)">
+            <summary>
+            Adds an attribute name surrogate to the vocabulary [X.891 Section 8.5].
+            </summary>
+            <param name="prefix">The Attribute's Prefix.</param>
+            <param name="ns">The Attribute's Namespace</param>
+            <param name="localName">The Attribute's Local Name.</param>
+        </member>
+        <member name="M:LiquidTechnologies.FastInfoset.FIVocabulary.AddElementNameSurrogate(System.String)">
+            <summary>
+            Adds an element name surrogate to the vocabulary [X.891 Section 8.5].
+            </summary>
+            <param name="localName">The Element's Local Name.</param>
+        </member>
+        <member name="M:LiquidTechnologies.FastInfoset.FIVocabulary.AddElementNameSurrogate(System.String,System.String)">
+            <summary>
+            Adds an element name surrogate to the vocabulary [X.891 Section 8.5].
+            </summary>
+            <param name="ns">The Element's Namespace</param>
+            <param name="localName">The Element's Local Name.</param>
+        </member>
+        <member name="M:LiquidTechnologies.FastInfoset.FIVocabulary.AddElementNameSurrogate(System.String,System.String,System.String)">
+            <summary>
+            Adds an element name surrogate to the vocabulary [X.891 Section 8.5].
+            </summary>
+            <param name="prefix">The Element's Prefix.</param>
+            <param name="ns">The Element's Namespace</param>
+            <param name="localName">The Element's Local Name.</param>
+        </member>
+        <member name="M:LiquidTechnologies.FastInfoset.FIVocabulary.AddAttributeValue(System.String)">
+            <summary>
+            Adds an attribute value to the vocabulary [X.891 Section 8.4].
+            </summary>
+            <param name="value">Attribute value to add.</param>
+        </member>
+        <member name="M:LiquidTechnologies.FastInfoset.FIVocabulary.AddContentCharacterChunk(System.String)">
+            <summary>
+            Adds a content character chunk to the vocabulary [X.891 Section 8.4].
+            </summary>
+            <param name="value">Content character chunk value to add.</param>
+        </member>
+        <member name="M:LiquidTechnologies.FastInfoset.FIVocabulary.AddPrefixName(System.String)">
+            <summary>
+            Adds an prefix to the vocabulary [X.891 Section 8.4].
+            </summary>
+            <param name="prefix">Prefix value to add.</param>
+        </member>
+        <member name="M:LiquidTechnologies.FastInfoset.FIVocabulary.AddNamespaceName(System.String)">
+            <summary>
+            Adds an namespace to the vocabulary [X.891 Section 8.4].
+            </summary>
+            <param name="ns">Namespace value to add.</param>
+        </member>
+        <member name="M:LiquidTechnologies.FastInfoset.FIVocabulary.AddLocalName(System.String)">
+            <summary>
+            Adds an local name to the vocabulary [X.891 Section 8.4].
+            </summary>
+            <param name="localName">Local name value to add.</param>
+        </member>
+        <member name="M:LiquidTechnologies.FastInfoset.FIVocabulary.AddOtherNCName(System.String)">
+            <summary>
+            Adds an other NC name to the vocabulary [X.891 Section 8.4].
+            </summary>
+            <param name="otherNCName">Other NC name value to add.</param>
+        </member>
+        <member name="M:LiquidTechnologies.FastInfoset.FIVocabulary.AddOtherString(System.String)">
+            <summary>
+            Adds an other string to the vocabulary [X.891 Section 8.4].
+            </summary>
+            <param name="otherString">Other string value to add.</param>
+        </member>
+        <member name="T:LiquidTechnologies.FastInfoset.FIExternalVocabulary">
+            <summary>
+            Implementation of a set of Fast Infoset vocabulary tables referenced by a URI.
+            </summary>
+        </member>
+        <member name="M:LiquidTechnologies.FastInfoset.FIExternalVocabulary.#ctor(System.Uri)">
+            <summary>
+            Initializes a new instance of the FIExternalVocabulary class with the specified URI [X.891 Section 7.2.13].
+            </summary>
+            <param name="uri">unique identifier for this FIExternalVocabulary</param>
+        </member>
+        <member name="P:LiquidTechnologies.FastInfoset.FIExternalVocabulary.URI">
+            <summary>
+            The unique identifier of this vocabulary.
+            </summary>
+            <value>The unique identifier of this vocabulary.</value>
+        </member>
+        <member name="T:LiquidTechnologies.FastInfoset.FIVocabularyManager">
+            <summary>
+            Manages external vocabulary objects
+            </summary>
+        </member>
+        <member name="M:LiquidTechnologies.FastInfoset.FIVocabularyManager.#ctor">
+            <summary>
+            Create an instance of the VocabularyManager class.
+            </summary>
+        </member>
+        <member name="M:LiquidTechnologies.FastInfoset.FIVocabularyManager.AddVocabulary(LiquidTechnologies.FastInfoset.FIExternalVocabulary)">
+            <summary>
+            Adds a FIExternalVocabulary object to the manager.
+            </summary>
+            <param name="vocabulary">Object to add.</param>
+            <exception cref="T:LiquidTechnologies.FastInfoset.LtFastInfosetException">A vocabulary already exists for URI.</exception>
+        </member>
+        <member name="T:LiquidTechnologies.FastInfoset.FIWriter">
+            <summary>
+            Represents a writer that provides a fast, non-cached, forward-only way of generating streams or files containing XML binary encoded data that conforms to the ITU-T: Fast infoset X.891 (05/2005) recommendation.
+            </summary>
+            <remarks><para>The FIWriter class derives from the System.Xml.XmlWriter .Net Framework class and supports the abstract methods required to integrate with other .Net Framework XML classes such as System.Xml.XmlDocument.</para>
+            <note><para>In the Microsoft .NET Framework version 2.0 release, the recommended practice is to create XmlWriter instances using the System.Xml.XmlWriter.Create method and the XmlWriterSettings class. This allows you to take full advantage of all the new features introduced in this release. For more information, see Creating XML Writers.</para></note>
+            </remarks>
+            <seealso cref="T:LiquidTechnologies.FastInfoset.FIReader"/>
+            <example>
+            <code>
+            string filename1 = new string(@"c:\MyFile.xml");
+            XmlDocument doc = new XmlDocument();
+            
+            // Read standard XML file into an XmlDocument
+            XmlReader reader = XmlReader.Create(new XmlTextReader(filename1), null);
+            doc.Load(reader);
+            reader.Close();
+            
+            // Write XML to file encoded as Fast Infoset
+            XmlWriter fiWriter = XmlWriter.Create(new FIWriter(filename1 + ".finf"));
+            doc.WriteTo(fiWriter);
+            fiWriter.Close();
+            
+            string filename2 = new string(@"c:\MyFile2.xml");
+            XmlDocument doc2 = new XmlDocument();
+            
+            // Read Fast Infoset encoded XML file into an XmlDocument
+            XmlReader fiReader = XmlReader.Create(new FIReader(filename1 + ".finf"), null);
+            doc2.Load(fiReader);
+            fiReader.Close();
+            
+            // Write standard XML to file
+            XmlWriter writer = XmlWriter.Create(new XmlTextWriter(filename2, Encoding.Default));
+            doc2.WriteTo(writer);
+            writer.Close();
+            </code>
+            </example>
+        </member>
+        <member name="T:LiquidTechnologies.FastInfoset.FIWriter.FInfoDecl">
+            <summary>
+            All possible XML Declarations that can be used in a Fast Infoset
+            </summary>
+        </member>
+        <member name="F:LiquidTechnologies.FastInfoset.FIWriter.FInfoDecl.FInfoDecl_NONE">
+            <summary>No Declaration</summary>
+        </member>
+        <member name="F:LiquidTechnologies.FastInfoset.FIWriter.FInfoDecl.FInfoDecl_1">
+            <summary>&lt;?xml encoding='finf'?&gt;</summary>
+        </member>
+        <member name="F:LiquidTechnologies.FastInfoset.FIWriter.FInfoDecl.FInfoDecl_2">
+            <summary>&lt;?xml encoding='finf' standalone='yes'?&gt;</summary>
+        </member>
+        <member name="F:LiquidTechnologies.FastInfoset.FIWriter.FInfoDecl.FInfoDecl_3">
+            <summary>&lt;?xml encoding='finf' standalone='no'?&gt;</summary>
+        </member>
+        <member name="F:LiquidTechnologies.FastInfoset.FIWriter.FInfoDecl.FInfoDecl_4">
+            <summary>&lt;?xml version='1.0' encoding='finf'?&gt;</summary>
+        </member>
+        <member name="F:LiquidTechnologies.FastInfoset.FIWriter.FInfoDecl.FInfoDecl_5">
+            <summary>&lt;?xml version='1.0' encoding='finf' standalone='yes'?&gt;</summary>
+        </member>
+        <member name="F:LiquidTechnologies.FastInfoset.FIWriter.FInfoDecl.FInfoDecl_6">
+            <summary>&lt;?xml version='1.0' encoding='finf' standalone='no'?&gt;</summary>
+        </member>
+        <member name="F:LiquidTechnologies.FastInfoset.FIWriter.FInfoDecl.FInfoDecl_7">
+            <summary>&lt;?xml version='1.1' encoding='finf'?&gt;</summary>
+        </member>
+        <member name="F:LiquidTechnologies.FastInfoset.FIWriter.FInfoDecl.FInfoDecl_8">
+            <summary>&lt;?xml version='1.1' encoding='finf' standalone='yes'?&gt;</summary>
+        </member>
+        <member name="F:LiquidTechnologies.FastInfoset.FIWriter.FInfoDecl.FInfoDecl_9">
+            <summary>&lt;?xml version='1.1' encoding='finf' standalone='no'?&gt;</summary>
+        </member>
+        <member name="M:LiquidTechnologies.FastInfoset.FIWriter.#ctor(System.String)">
+            <summary>
+            Creates an instance of the FIWriter class class using the specified file.
+            </summary>
+            <param name="filename">The file to which you want to write. If the file exists, it truncates it and overwrites it with the new content.</param>
+        </member>
+        <member name="M:LiquidTechnologies.FastInfoset.FIWriter.#ctor(System.String,LiquidTechnologies.FastInfoset.FIVocabulary)">
+            <summary>
+            Creates an instance of the FIWriter class class using the specified file and vocabulary.
+            </summary>
+            <param name="filename">The file to which you want to write. If the file exists, it truncates it and overwrites it with the new content.</param>
+            <param name="vocabulary">The initial vocabulary used to provide the initial state of the internal vocabulary tables.</param>
+        </member>
+        <member name="M:LiquidTechnologies.FastInfoset.FIWriter.#ctor(System.IO.Stream)">
+            <summary>
+            Creates an instance of the XmlTextWriter class using the specified stream.
+            </summary>
+            <param name="output">The stream to which you want to write.</param>
+        </member>
+        <member name="M:LiquidTechnologies.FastInfoset.FIWriter.#ctor(System.IO.Stream,LiquidTechnologies.FastInfoset.FIVocabulary)">
+            <summary>
+            Creates an instance of the XmlTextWriter class using the specified stream and vocabulary.
+            </summary>
+            <param name="output">The stream to which you want to write.</param>
+            <param name="vocabulary">The initial vocabulary used to provide the initial state of the internal vocabulary tables.</param>
+        </member>
+        <member name="M:LiquidTechnologies.FastInfoset.FIWriter.WriteStartDocument(LiquidTechnologies.FastInfoset.FIWriter.FInfoDecl)">
+            <summary>
+            Writes a Fast Infoset declaration at the start of output stream.
+            </summary>
+            <param name="decl">The Fast Infoset Declaration to use.</param>
+            <exception cref="T:System.InvalidOperationException">The <see cref="P:LiquidTechnologies.FastInfoset.FIWriter.WriteState"/> is invalid for this operation.</exception>
+        </member>
+        <member name="M:LiquidTechnologies.FastInfoset.FIWriter.WriteRestrictedAlphabetString(System.String,System.Int32)">
+            <summary>
+            Writes the given text encoded using the specified Restricted Alphabet Encoding.
+            </summary>
+            <param name="text">Text to write.</param>
+            <param name="alphabetTableIndex">Index of restricted alphabet</param>
+            <exception cref="T:System.ArgumentException">A Restricted Alphabet cannot be found for the specified index.</exception>
+            <exception cref="T:System.InvalidOperationException">The <see cref="P:LiquidTechnologies.FastInfoset.FIWriter.WriteState"/> is invalid for this operation.</exception>
+            <exception cref="T:System.IndexOutOfRangeException">Index must be between 1 and 256</exception>
+        </member>
+        <member name="M:LiquidTechnologies.FastInfoset.FIWriter.WriteEncodedData(System.Byte[],System.Uri)">
+            <summary>
+            Writes the given data encoded using the specified Encoding Algorithm.
+            </summary>
+            <param name="data">Data to encode.</param>
+            <param name="encodingAlgorithmURI">Encoding Algorithm Unique Identifier</param>
+            <exception cref="T:System.ArgumentNullException">encodingAlgorithmURI is null.</exception>
+            <exception cref="T:System.InvalidOperationException">The <see cref="P:LiquidTechnologies.FastInfoset.FIWriter.WriteState"/> is invalid for this operation.</exception>
+            <exception cref="T:LiquidTechnologies.FastInfoset.LtFastInfosetException">Cannot find EncodingAlgorithm for specified URI.</exception>
+        </member>
+        <member name="M:LiquidTechnologies.FastInfoset.FIWriter.Close">
+            <summary>
+            Closes this stream and the underlying stream.
+            </summary>
+        </member>
+        <member name="M:LiquidTechnologies.FastInfoset.FIWriter.Flush">
+            <summary>
+             Flushes whatever is in the buffer to the underlying streams and also flushes the underlying stream.
+            </summary>
+        </member>
+        <member name="M:LiquidTechnologies.FastInfoset.FIWriter.LookupPrefix(System.String)">
+            <summary>
+            Returns the closest prefix defined in the current namespace scope for the namespace URI.
+            </summary>
+            <param name="ns"></param>
+            <returns></returns>
+        </member>
+        <member name="P:LiquidTechnologies.FastInfoset.FIWriter.WriteState">
+            <summary>
+            Gets the state of the writer.
+            </summary>
+        </member>
+        <member name="M:LiquidTechnologies.FastInfoset.FIWriter.WriteBase64(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Writes out the specified binary bytes using the built-in "base64" encoding algorithm [X.891 Section 10.3].
+            </summary>
+            <param name="buffer">Byte array to encode.</param>
+            <param name="index">The position within the buffer indicating the start of the bytes to write.</param>
+            <param name="count">The number of bytes to write.</param>
+            <exception cref="T:System.InvalidOperationException">The <see cref="P:LiquidTechnologies.FastInfoset.FIWriter.WriteState"/> is invalid for this operation.</exception>
+        </member>
+        <member name="M:LiquidTechnologies.FastInfoset.FIWriter.WriteCData(System.String)">
+            <summary>
+            Writes out the specified string using the built-in "cdata" encoding algorithm [X.891 Section 10.11].
+            </summary>
+            <param name="text">Text to encode.</param>
+            <exception cref="T:System.InvalidOperationException">The <see cref="P:LiquidTechnologies.FastInfoset.FIWriter.WriteState"/> is invalid for this operation.</exception>
+        </member>
+        <member name="M:LiquidTechnologies.FastInfoset.FIWriter.WriteCharEntity(System.Char)">
+            <summary>
+            Writes out a Unicode character value.
+            </summary>
+            <param name="ch">Unicode character to write out.</param>
+            <exception cref="T:System.ArgumentException">The character is in the surrogate pair character range, 0xd800 - 0xdfff.</exception>
+            <exception cref="T:System.InvalidOperationException">The <see cref="P:LiquidTechnologies.FastInfoset.FIWriter.WriteState"/> is invalid for this operation.</exception>
+        </member>
+        <member name="M:LiquidTechnologies.FastInfoset.FIWriter.WriteChars(System.Char[],System.Int32,System.Int32)">
+            <summary>
+            Writes out specified characters.
+            </summary>
+            <param name="buffer">Character array containing the text to write.</param>
+            <param name="index">The position in the buffer indicating the start of the text to write.</param>
+            <param name="count">The number of characters to write.</param>
+            <exception cref="T:System.ArgumentNullException">buffer is a null reference (Nothing in Visual Basic).</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">index or count is less than zero.<para>-or-</para>The buffer length minus index is less than count</exception>
+            <exception cref="T:System.InvalidOperationException">The <see cref="P:LiquidTechnologies.FastInfoset.FIWriter.WriteState"/> is invalid for this operation.</exception>
+        </member>
+        <member name="M:LiquidTechnologies.FastInfoset.FIWriter.WriteComment(System.String)">
+            <summary>
+            Writes out a comment [X.891 Section 7.8].
+            </summary>
+            <param name="text">Text to place inside the comment.</param>
+            <exception cref="T:System.ArgumentException">The text would result in a non-well formed XML document.</exception>
+            <exception cref="T:System.InvalidOperationException">The <see cref="P:LiquidTechnologies.FastInfoset.FIWriter.WriteState"/> is invalid for this operation.</exception>
+        </member>
+        <member name="M:LiquidTechnologies.FastInfoset.FIWriter.WriteDocType(System.String,System.String,System.String,System.String)">
+            <summary>
+            The method or operation is not implemented.
+            </summary>
+            <param name="name"></param>
+            <param name="pubid"></param>
+            <param name="sysid"></param>
+            <param name="subset"></param>
+            <exception cref="T:System.Exception">The method or operation is not implemented.</exception>
+        </member>
+        <member name="M:LiquidTechnologies.FastInfoset.FIWriter.WriteEntityRef(System.String)">
+            <summary>
+            The method or operation is not implemented.
+            </summary>
+            <param name="name"></param>
+            <exception cref="T:System.Exception">The method or operation is not implemented.</exception>
+        </member>
+        <member name="M:LiquidTechnologies.FastInfoset.FIWriter.WriteProcessingInstruction(System.String,System.String)">
+            <summary>
+            Writes out a processing instruction [X.891 Section 7.5]
+            </summary>
+            <param name="name">Name of the processing instruction.</param>
+            <param name="text">Text to include in the processing instruction.</param>
+            <exception cref="T:System.ArgumentException"><para>The text would result in a non-well formed XML document.</para><para>name is either a null reference (Nothing in Visual Basic) or String.Empty.</para>This method is being used to create an XML declaration after <see cref="M:LiquidTechnologies.FastInfoset.FIWriter.WriteStartDocument"/> has already been called.</exception>
+            <exception cref="T:System.InvalidOperationException">The <see cref="P:LiquidTechnologies.FastInfoset.FIWriter.WriteState"/> is invalid for this operation.</exception>
+        </member>
+        <member name="M:LiquidTechnologies.FastInfoset.FIWriter.WriteRaw(System.String)">
+            <summary>
+            Passes data to <see cref="M:LiquidTechnologies.FastInfoset.FIWriter.WriteString(System.String)"/>.
+            </summary>
+            <param name="data">Text to write.</param>
+        </member>
+        <member name="M:LiquidTechnologies.FastInfoset.FIWriter.WriteRaw(System.Char[],System.Int32,System.Int32)">
+            <summary>
+            Passes data to <see cref="M:LiquidTechnologies.FastInfoset.FIWriter.WriteString(System.String)"/>.
+            </summary>
+            <param name="buffer">Character array containing the text to write.</param>
+            <param name="index">The position in the buffer indicating the start of the text to write.</param>
+            <param name="count">The number of characters to write.</param>
+        </member>
+        <member name="M:LiquidTechnologies.FastInfoset.FIWriter.WriteString(System.String)">
+            <summary>
+            Writes the given text content.
+            </summary>
+            <param name="text">Text to write.</param>
+        </member>
+        <member name="M:LiquidTechnologies.FastInfoset.FIWriter.WriteSurrogateCharEntity(System.Char,System.Char)">
+            <summary>
+            The method or operation is not implemented.
+            </summary>
+            <param name="lowChar"></param>
+            <param name="highChar"></param>
+            <exception cref="T:System.Exception">The method or operation is not implemented.</exception>
+        </member>
+        <member name="M:LiquidTechnologies.FastInfoset.FIWriter.WriteWhitespace(System.String)">
+            <summary>
+            The method or operation is not implemented.
+            </summary>
+            <param name="ws"></param>
+        </member>
+        <member name="M:LiquidTechnologies.FastInfoset.FIWriter.WriteStartAttribute(System.String,System.String,System.String)">
+            <summary>
+            Writes the start of an attribute.
+            </summary>
+            <param name="prefix">Namespace prefix of the attribute.</param>
+            <param name="localName">LocalName of the attribute.</param>
+            <param name="ns">NamespaceURI of the attribute.</param>
+            <exception cref="T:System.InvalidOperationException">The <see cref="P:LiquidTechnologies.FastInfoset.FIWriter.WriteState"/> is invalid for this operation.</exception>
+        </member>
+        <member name="M:LiquidTechnologies.FastInfoset.FIWriter.WriteEndAttribute">
+            <summary>
+            Closes the previous <see cref="M:LiquidTechnologies.FastInfoset.FIWriter.WriteStartAttribute(System.String,System.String,System.String)"/> call.
+            </summary>
+            <remarks><para>If you call WriteStartAttribute, you can close the attribute with this method.</para>You can also close the attribute by calling <see cref="M:LiquidTechnologies.FastInfoset.FIWriter.WriteStartAttribute(System.String,System.String,System.String)"/> again, calling <see cref="M:System.Xml.XmlWriter.WriteAttributeString(System.String,System.String,System.String)"/>, calling <see cref="M:LiquidTechnologies.FastInfoset.FIWriter.WriteEndElement"/>, or calling <see cref="M:LiquidTechnologies.FastInfoset.FIWriter.WriteEndDocument"/>.</remarks>
+            <exception cref="T:System.InvalidOperationException">The <see cref="P:LiquidTechnologies.FastInfoset.FIWriter.WriteState"/> is invalid for this operation.</exception>
+        </member>
+        <member name="M:LiquidTechnologies.FastInfoset.FIWriter.WriteStartDocument">
+            <summary>
+            Writes a Fast Infoset declaration at the start of output stream.
+            </summary>
+            <exception cref="T:System.InvalidOperationException">The <see cref="P:LiquidTechnologies.FastInfoset.FIWriter.WriteState"/> is invalid for this operation.</exception>
+        </member>
+        <member name="M:LiquidTechnologies.FastInfoset.FIWriter.WriteStartDocument(System.Boolean)">
+            <summary>
+            Writes a Fast Infoset declaration at the start of output stream.
+            </summary>
+            <param name="standalone">If true, it writes "standalone='yes'"; if false, it writes "standalone='no'".</param>
+            <exception cref="T:System.InvalidOperationException">The <see cref="P:LiquidTechnologies.FastInfoset.FIWriter.WriteState"/> is invalid for this operation.</exception>
+        </member>
+        <member name="M:LiquidTechnologies.FastInfoset.FIWriter.WriteEndDocument">
+            <summary>
+            Closes any open elements or attributes and puts the writer back in the Start state.
+            </summary>
+            <exception cref="T:System.InvalidOperationException">The <see cref="P:LiquidTechnologies.FastInfoset.FIWriter.WriteState"/> is invalid for this operation.</exception>
+        </member>
+        <member name="M:LiquidTechnologies.FastInfoset.FIWriter.WriteStartElement(System.String,System.String,System.String)">
+            <summary>
+            Writes the specified start tag and associates it with the given namespace and prefix.
+            </summary>
+            <param name="prefix">The namespace prefix of the element.</param>
+            <param name="localName">The local name of the element.</param>
+            <param name="ns">The namespace URI to associate with the element. If this namespace is already in scope and has an associated prefix then the writer automatically writes that prefix also.</param>
+            <exception cref="T:System.InvalidOperationException">The <see cref="P:LiquidTechnologies.FastInfoset.FIWriter.WriteState"/> is invalid for this operation.</exception>
+        </member>
+        <member name="M:LiquidTechnologies.FastInfoset.FIWriter.WriteEndElement">
+            <summary>
+            Closes one element and pops the corresponding namespace scope. 
+            </summary>
+        </member>
+        <member name="M:LiquidTechnologies.FastInfoset.FIWriter.WriteFullEndElement">
+            <summary>
+            Closes one element and pops the corresponding namespace scope. 
+            </summary>
+        </member>
+        <member name="T:LiquidTechnologies.FastInfoset.LtFastInfosetException">
+            <summary>
+            Returns detailed information about the last exception.
+            </summary>
+        </member>
+        <member name="M:LiquidTechnologies.FastInfoset.LtFastInfosetException.#ctor">
+            <summary>
+            Initializes a new instance of the XmlException class.
+            </summary>
+        </member>
+        <member name="M:LiquidTechnologies.FastInfoset.LtFastInfosetException.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the XmlException class with a specified error message. 
+            </summary>
+            <param name="message">The error description.</param>
+        </member>
+        <member name="M:LiquidTechnologies.FastInfoset.LtFastInfosetException.#ctor(System.String,System.Exception)">
+            <summary>
+            Initializes a new instance of the XmlException class.
+            </summary>
+            <param name="message">The description of the error condition.</param>
+            <param name="innerException">The <see cref="T:System.Exception"/> that threw the XmlException, if any. This value can be a null reference (Nothing in Visual Basic).</param>
+        </member>
+        <member name="T:LiquidTechnologies.FastInfoset.Utils">
+            <summary>
+            Utility class.
+            </summary>
+        </member>
+    </members>
+</doc>

@@ -3,16 +3,16 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.421
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LiquidTechnologies.FastInfoset", "LiquidTechnologies.FastInfoset.csproj", "{8986B478-578A-4825-997D-9B53B8034E43}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LiquidTechnologies.FastInfoset", "LiquidTechnologies.FastInfoset\LiquidTechnologies.FastInfoset.csproj", "{8986B478-578A-4825-997D-9B53B8034E43}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "LiquidTechnologies.FastInfoset.Shared", "..\LiquidTechnologies.FastInfoset.Shared\LiquidTechnologies.FastInfoset.Shared.shproj", "{22093CF7-78DC-42C9-B1B6-B1BC35553E18}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "LiquidTechnologies.FastInfoset.Shared", "LiquidTechnologies.FastInfoset.Shared\LiquidTechnologies.FastInfoset.Shared.shproj", "{22093CF7-78DC-42C9-B1B6-B1BC35553E18}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LiquidTechnologies.FastInfoSet-NetStandard", "..\LiquidTechnologies.FastInfoSet-NetStandard\LiquidTechnologies.FastInfoSet-NetStandard.csproj", "{99E1A2B8-4AE1-46D3-8EB9-C399D72A2BE3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LiquidTechnologies.FastInfoSet-NetStandard", "LiquidTechnologies.FastInfoSet-NetStandard\LiquidTechnologies.FastInfoSet-NetStandard.csproj", "{99E1A2B8-4AE1-46D3-8EB9-C399D72A2BE3}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		..\LiquidTechnologies.FastInfoset.Shared\LiquidTechnologies.FastInfoset.Shared.projitems*{22093cf7-78dc-42c9-b1b6-b1bc35553e18}*SharedItemsImports = 13
-		..\LiquidTechnologies.FastInfoset.Shared\LiquidTechnologies.FastInfoset.Shared.projitems*{8986b478-578a-4825-997d-9b53b8034e43}*SharedItemsImports = 4
+		LiquidTechnologies.FastInfoset.Shared\LiquidTechnologies.FastInfoset.Shared.projitems*{22093cf7-78dc-42c9-b1b6-b1bc35553e18}*SharedItemsImports = 13
+		LiquidTechnologies.FastInfoset.Shared\LiquidTechnologies.FastInfoset.Shared.projitems*{8986b478-578a-4825-997d-9b53b8034e43}*SharedItemsImports = 4
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

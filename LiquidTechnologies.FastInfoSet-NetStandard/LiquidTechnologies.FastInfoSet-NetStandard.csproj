@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>LiquidTechnologies.FastInfoSet</RootNamespace>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+    <Authors>Original authors: LiquidTechnologies, Nuget package: mamift</Authors>
+    <Description>This is a .NET Standard 2.0 version of LiquidTechnologies.FastInfoset library. This nuget package is NOT an official release from LiquidTechnologies. However, it is built and compiled from functionally unmodified code originally posted by LiquidTechnologies here: https://sourceforge.net/projects/fastinfoset. Licensed by LiquidTechnologies under the AGPL (https://www.gnu.org/licenses/agpl-3.0.en.html).</Description>
+    <PackageLicenseUrl></PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/mamift/LiquidFastInfoset</PackageProjectUrl>
+    <Copyright>Original Copyright © 2001-2011 Liquid Technologies Limited. All rights reserved.</Copyright>
+    <PackageTags>XML, FastInfoSet, XmlWriter, XmlReader</PackageTags>
+    <PackageReleaseNotes>The code is functionally equivalent to the original sourceforge project (https://sourceforge.net/projects/fastinfoset), but the source code files themselves have been modified in superficial ways to better accommodate refactoring.</PackageReleaseNotes>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>C:\Users\mmiftah\Projects\Liquid-FI-Source-1.0.6\LiquidTechnologies.FastInfoSet-NetStandard\LiquidTechnologies.FastInfoSet-NetStandard.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <Import Project="..\LiquidTechnologies.FastInfoset.Shared\LiquidTechnologies.FastInfoset.Shared.projitems" Label="Shared" />
+
+  <ItemGroup>
+    <Content Include="LICENSE.txt" Pack="true" PackagePath="" />
+  </ItemGroup>
+
+</Project>

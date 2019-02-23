@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>22093cf7-78dc-42c9-b1b6-b1bc35553e18</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>LiquidTechnologies.FastInfoset.Shared</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)FIConsts.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)FIEncoder.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)FIEncoder.FIAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)FIEncoder.FIElement.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)FIEncoding.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)FIEncodingAlgorithm.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)FIEncodingAlgorithmManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)FIParser.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)FIParser.FINode.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)FIParser.StreamBuffer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)FIReader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)FIReaderVocabulary.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)FIRestrictedAlphabet.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)FIRestrictedAlphabetManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)FIVocabulary.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)FIVocabularyManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)FIWriter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)FIWriterVocabulary.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)FIWriterVocabulary.QNameArray.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)FIWriterVocabulary.QNameIndex.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)FIWriterVocabulary.QNameIndexLookup.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)InternalEncodingAlgorithm.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)InternalFIWriter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)InternalFIWriter.NamespaceManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)LtFastInfosetException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)QualifiedName.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils.cs" />
+  </ItemGroup>
+</Project>
